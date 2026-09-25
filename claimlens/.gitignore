@@ -1,0 +1,12 @@
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.pytest_cache/
+.venv/
+venv/
+
+# Generated -- recreate with `python -m claimlens generate`
+data/
+# Run outputs (commit selected reports by hand if you want them in the repo)
+runs/
+*.zip
