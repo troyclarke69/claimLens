@@ -105,6 +105,15 @@ def encode_example(processor, example: dict, prompt_version: str = PROMPT_VERSIO
     enc = processor(text=[chat_prompt_text(processor, prompt)], images=[image], return_tensors="pt")
     eos = "<|im_end|>"  # Qwen's end-of-turn token: we also teach the model to STOP
     tgt = processor.tokenizer(example["target"] + eos, add_special_tokens=False, return_tensors="pt")["input_ids"]
+    prompt_len = enc["input_ids"].shape[1]
+    # Any other per-token tensor the processor returns (newer transformers add
+    # e.g. `mm_token_type_ids`, which marks image vs text tokens) must be
+    # extended too; answer tokens are plain text (type 0).
+    for k, v in list(enc.items()):
+        if k in ("input_ids", "attention_mask", "pixel_values", "image_grid_thw"):
+            continue
+        if torch.is_tensor(v) and v.dim() == 2 and v.shape[0] == 1 and v.shape[1] == prompt_len:
+            enc[k] = torch.cat([v, torch.zeros((1, tgt.shape[1]), dtype=v.dtype)], dim=1)
     enc["input_ids"] = torch.cat([enc["input_ids"], tgt], dim=1)
     enc["attention_mask"] = torch.ones_like(enc["input_ids"])
     enc["target_ids"] = tgt  # the tokens we compute loss on

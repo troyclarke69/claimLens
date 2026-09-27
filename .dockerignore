@@ -1,0 +1,10 @@
+.venv
+venv
+data
+runs
+adapters
+old_local
+*.zip
+**/__pycache__
+.pytest_cache
+notebooks

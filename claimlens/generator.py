@@ -232,7 +232,7 @@ def make_record(doc_id: str, seed: int, doc_type: Optional[str] = None,
     items = rng.sample(LINE_ITEMS[lob], rng.randint(2, 5))
     items = [(d, q, round(p * rng.uniform(0.8, 1.35), 2)) for d, q, p in items]
 
-    is_form = doc_type == "claim_form"
+    is_form = doc_type.startswith("claim_form")
     quality = rng.choices(["clean", "moderate", "poor"], weights=[0.45, 0.35, 0.20])[0]
     skew_max = {"clean": 0.4, "moderate": 1.5, "poor": 3.0}[quality]
 
@@ -266,7 +266,7 @@ def make_record(doc_id: str, seed: int, doc_type: Optional[str] = None,
 
 def ground_truth_values(rec: ClaimRecord) -> dict[str, Optional[str]]:
     """Canonical value per field (None = not present on this document)."""
-    is_form = rec.doc_type == "claim_form"
+    is_form = rec.doc_type.startswith("claim_form")
     vals = {
         "claim_number": rec.claim_number if (is_form or rec.show_claim_ref) else None,
         "policy_number": rec.policy_number if (is_form or rec.show_policy_on_invoice) else None,
@@ -507,6 +507,275 @@ def _render_invoice(rec: ClaimRecord, c: _Canvas):
     c.text((60, y + 24), "Thank you for your business.", size=14, fill=GREY, role="other")
 
 
+# ---- HELD-OUT templates ----------------------------------------------------
+# Never used for training. Same fields, different layout AND different wording
+# (e.g. "Insured" not "Policyholder name", "Our reference" not "Claim number",
+# values BELOW their labels instead of beside them). They measure how much of
+# the fine-tuning gain generalises beyond the layouts the model trained on.
+HOLDOUT_TYPES = ("claim_form_b", "invoice_b")
+
+
+def _cell(c: _Canvas, x, y, w, label, value, field_name=None, hand=False, role_if_no_field="distractor",
+          distractor_of=None, key=None):
+    """A boxed form cell: small grey caps label on top, value underneath."""
+    c.box([x, y, x + w, y + 62], outline=(150, 150, 150))
+    c.text((x + 8, y + 6), label.upper(), size=12, kind="bold", fill=GREY, role="label", key=f"lbl:{label}")
+    if value is None:
+        return
+    role = "value" if field_name else role_if_no_field
+    c.text((x + 10, y + 28), value, size=18, role=role, field_name=field_name or distractor_of, hand=hand,
+           key=key or f"val:{label}")
+
+
+def _render_claim_form_b(rec: ClaimRecord, c: _Canvas):
+    d, hw = rec.date_format, rec.handwritten
+    c.draw.rectangle([40, 40, 940, 120], fill=(232, 238, 246))
+    c.text((60, 58), rec.insurer.upper(), size=22, kind="bold", role="header")
+    c.text((60, 90), "Claims Department", size=14, fill=GREY, role="other")
+    c.text((640, 62), "NOTICE OF LOSS", size=24, kind="bold", role="header")
+
+    x0, x1, w = 40, 490, 450
+    y = 150
+    _cell(c, x0, y, w, "Insured / claimant", rec.claimant_name, "claimant_name", hw, key="val:name")
+    _cell(c, x1, y, w, "Policy no.", rec.policy_number, "policy_number", hw)
+    y += 62
+    _cell(c, x0, y, w, "Our reference", rec.claim_number, "claim_number", hw)
+    _cell(c, x1, y, w, "Loss date", rec.date_of_loss.strftime(d), "date_of_loss", hw)
+    y += 62
+    _cell(c, x0, y, w, "Nature of loss", rec.incident_type, "incident_type", hw)
+    _cell(c, x1, y, w, "Insured date of birth", rec.date_of_birth.strftime(d), None, hw,
+          distractor_of="date_of_loss")
+    y += 62
+    _cell(c, x0, y, w, "Repairer / service provider", rec.provider_name,
+          "provider_name" if rec.provider_name else None, hw, key="val:provider")
+    _cell(c, x1, y, w, "Date notified", rec.date_reported.strftime(d), None, hw, distractor_of="date_of_loss")
+
+    y += 100
+    c.text((40, y), "Circumstances", size=15, kind="bold", role="label")
+    y += 28
+    font = get_font("hand" if hw else "regular", 17)
+    for i, line in enumerate(_wrap(DESCRIPTIONS[rec.incident_type], font, 860, c.draw)):
+        c.text((50, y), line, size=17, role="other", hand=hw, key=f"desc:{i}")
+        y += 30
+
+    y += 50
+    c.box([40, y, 440, y + 90], outline=INK, width=2)
+    c.text((56, y + 10), "POLICY EXCESS", size=13, kind="bold", fill=GREY, role="label")
+    c.text((56, y + 44), fmt_amount(rec.deductible, rec.amount_format), size=20, role="distractor",
+           field_name="total_amount", hand=hw, key="val:excess")
+    c.box([500, y, 940, y + 90], outline=INK, width=2)
+    c.text((516, y + 10), "AMOUNT OF CLAIM", size=13, kind="bold", fill=GREY, role="label")
+    c.text((516, y + 44), fmt_amount(rec.claimed_amount, rec.amount_format), size=22, kind="bold", role="value",
+           field_name="total_amount", hand=hw, key="val:amount")
+
+    y += 150
+    c.text((40, y), "Claimant signature", size=14, kind="bold", role="label")
+    rng = c._rng("signature")
+    c.draw.line([(220 + i * 11, y + 10 + rng.uniform(-8, 8)) for i in range(20)], fill=PEN, width=2)
+    c.text((600, y), "Signed on", size=14, kind="bold", role="label")
+    c.text((700, y - 2), rec.date_reported.strftime(d), size=16, role="distractor", field_name="date_of_loss",
+           hand=hw, key="val:sigdate")
+
+
+def _render_invoice_b(rec: ClaimRecord, c: _Canvas):
+    d, af = rec.date_format, rec.amount_format
+    c.text((60, 50), "STATEMENT OF ACCOUNT", size=26, kind="bold", role="header")
+    c.text((60, 88), "Please remit the balance due by the date shown.", size=14, fill=GREY, role="other")
+    # provider block on the RIGHT this time
+    c.text((560, 50), rec.provider_name, size=20, kind="bold", role="value", field_name="provider_name",
+           key="val:provider")
+    c.text((560, 80), rec._prov_street, size=14, fill=GREY, role="other")
+    c.text((560, 100), f"{rec._prov_city}  ·  {rec._prov_phone}", size=14, fill=GREY, role="other")
+    c.hline(40, 940, 135, fill=INK, width=2)
+
+    y = 160
+    c.text((60, y), "Customer / patient", size=13, kind="bold", fill=GREY, role="label")
+    c.text((60, y + 22), rec.claimant_name, size=18, role="value", field_name="claimant_name", key="val:name")
+    c.text((60, y + 48), f"{rec.street}, {rec.city}", size=14, role="other")
+
+    rows = [("Account no.", rec.invoice_number, "distractor", "claim_number", "val:invno"),
+            ("Statement date", rec.invoice_date.strftime(d), "distractor", "date_of_loss", "val:invdate"),
+            ("Treatment / service date", rec.date_of_loss.strftime(d), "value", "date_of_loss", "val:dos")]
+    if rec.show_claim_ref:
+        rows.append(("Insurer claim #", rec.claim_number, "value", "claim_number", "val:claim"))
+    if rec.show_policy_on_invoice:
+        rows.append(("Coverage / policy", rec.policy_number, "value", "policy_number", "val:policy"))
+    ry = y
+    for lbl, val, role, fname, key in rows:
+        c.text((520, ry), lbl, size=14, kind="bold", role="label", key=f"lbl:{lbl}")
+        c.text((740, ry - 1), val, size=15, role=role, field_name=fname, key=key)
+        ry += 26
+
+    y = max(ry, y + 80) + 40
+    c.draw.rectangle([40, y, 940, y + 30], fill=(40, 40, 40))
+    for x, h in [(52, "Date"), (200, "Service"), (780, "Charge")]:
+        c.text((x, y + 7), h, size=14, kind="bold", fill=(255, 255, 255), role="label")
+    y += 42
+    for i, (desc, q, p) in enumerate(rec.line_items):
+        c.text((52, y), rec.date_of_loss.strftime("%m/%d"), size=14, role="other", key=f"li:{i}:d8")
+        c.text((200, y), f"{desc} x{q}" if q > 1 else desc, size=15, role="other", key=f"li:{i}:d")
+        c.text((780, y), fmt_amount(q * p, af), size=15, role="distractor", field_name="total_amount",
+               key=f"li:{i}:a")
+        y += 30
+
+    y += 30
+    c.hline(560, 940, y - 10)
+    c.text((580, y), "Charges this period", size=14, kind="bold", role="label")
+    c.text((800, y), fmt_amount(rec.subtotal, af), size=15, role="distractor", field_name="total_amount",
+           key="val:subtotal")
+    y += 28
+    c.text((580, y), "Sales tax", size=14, kind="bold", role="label")
+    c.text((800, y), fmt_amount(rec.tax, af), size=15, role="distractor", field_name="total_amount", key="val:tax")
+    y += 40
+    c.draw.rectangle([560, y - 8, 940, y + 34], outline=INK, width=2)
+    c.text((580, y + 2), "BALANCE DUE", size=17, kind="bold", role="label")
+    c.text((790, y + 1), fmt_amount(rec.invoice_total, af), size=19, kind="bold", role="value",
+           field_name="total_amount", key="val:total")
+
+
+# ---- RANDOMISED training templates (Phase 3) --------------------------------
+# Used ONLY for training (RL and its SFT control). Every document shuffles field
+# order and position, switches between "label: value" and "label above value",
+# and picks label wording from synonym pools. The pools deliberately avoid the
+# held-out wording ("Our reference", "Nature of loss", "Insured / claimant",
+# "Loss date", "Account no.", "Balance due", ...) so the held-out test stays a
+# test of generalisation, not of memorising one more synonym.
+RANDOM_TYPES = ("claim_form_r", "invoice_r")
+SYN = {
+    "claim_number": ["Claim number", "Claim no.", "Claim #", "File number", "Claim reference", "Claim ID"],
+    "policy_number": ["Policy number", "Policy #", "Policy ID", "Certificate no.", "Contract number"],
+    "claimant_form": ["Policyholder name", "Claimant", "Name of insured", "Policy holder", "Member name"],
+    "claimant_inv": ["Bill to", "Patient", "Client", "Customer name", "Billed to"],
+    "loss_form": ["Date of loss", "Incident date", "Date of incident", "Date of accident", "Event date"],
+    "loss_inv": ["Date of service", "Service date", "Date of treatment", "Work completed"],
+    "incident": ["Incident type", "Type of loss", "Cause of loss", "Loss type", "Peril"],
+    "provider_form": ["Provider name", "Repair shop", "Service provider", "Treating clinic", "Contractor"],
+    "total_form": ["Total claimed", "Amount claimed", "Claim amount", "Total loss amount"],
+    "total_inv": ["TOTAL", "Total due", "Amount payable", "Invoice total", "Grand total"],
+    "dob": ["Date of birth", "DOB", "Birth date"],
+    "reported": ["Date reported", "Reported on", "Date of report", "Received"],
+    "deductible": ["Deductible", "Deductible amount"],
+    "inv_no": ["Invoice #", "Invoice no.", "Inv. number", "Bill no."],
+    "inv_date": ["Invoice date", "Billing date", "Date issued"],
+    "subtotal": ["Subtotal", "Sub-total", "Net amount"],
+    "tax": ["Tax", "HST", "GST"],
+    "form_title": ["CLAIM FORM", "LOSS REPORT", "CLAIM SUBMISSION", "INSURANCE CLAIM"],
+    "inv_title": ["INVOICE", "BILL", "TAX INVOICE", "RECEIPT FOR SERVICES"],
+}
+
+
+def _place(c: _Canvas, x, y, label, value, mode, role, field_name, hand, key, vsize=18):
+    """Draw one label/value pair, either beside or below. Returns the row height used."""
+    lab = label + (":" if mode == "beside" else "")
+    c.text((x, y), lab if mode == "beside" else lab.upper(), size=15 if mode == "beside" else 12, kind="bold",
+           fill=INK if mode == "beside" else GREY, role="label", key=f"lbl:{key}")
+    if mode == "beside":
+        vx = x + c.draw.textlength(lab, font=get_font("bold", 15)) + 14
+        c.text((vx, y - 1), value, size=vsize, role=role, field_name=field_name, hand=hand, key=key)
+        return 44
+    c.text((x, y + 20), value, size=vsize, role=role, field_name=field_name, hand=hand, key=key)
+    return 64
+
+
+def _render_claim_form_r(rec: ClaimRecord, c: _Canvas):
+    rng, d, hw = c._rng("layout"), rec.date_format, rec.handwritten
+    mode = rng.choice(["beside", "below"])
+    vsize = rng.randint(16, 19)
+    c.text((50, 45), rec.insurer, size=rng.randint(22, 28), kind="bold", role="header")
+    c.text((rng.choice([50, 600]), 88), rng.choice(SYN["form_title"]), size=18, kind="bold", fill=GREY,
+           role="header")
+    c.hline(50, 930, 122, fill=INK, width=2)
+    pick = lambda k: rng.choice(SYN[k])
+    items = [
+        (pick("claimant_form"), rec.claimant_name, "value", "claimant_name", "val:name"),
+        (pick("policy_number"), rec.policy_number, "value", "policy_number", "val:policy"),
+        (pick("claim_number"), rec.claim_number, "value", "claim_number", "val:claim"),
+        (pick("loss_form"), rec.date_of_loss.strftime(d), "value", "date_of_loss", "val:loss"),
+        (pick("incident"), rec.incident_type, "value", "incident_type", "val:incident"),
+        (pick("dob"), rec.date_of_birth.strftime(d), "distractor", "date_of_loss", "val:dob"),
+        (pick("reported"), rec.date_reported.strftime(d), "distractor", "date_of_loss", "val:reported"),
+        ("Phone", rec.phone, "other", None, "val:phone"),
+    ]
+    if rec.provider_name:
+        items.append((pick("provider_form"), rec.provider_name, "value", "provider_name", "val:provider"))
+    rng.shuffle(items)
+    y = rng.randint(145, 185)
+    if mode == "beside":  # one column
+        x = rng.choice([50, 70, 90])
+        for lab, val, role, f, key in items:
+            y += _place(c, x, y, lab, val, mode, role, f, hw, key, vsize)
+    else:  # two-column grid
+        xs = [50, rng.randint(480, 520)]
+        for i, (lab, val, role, f, key) in enumerate(items):
+            _place(c, xs[i % 2], y, lab, val, mode, role, f, hw, key, vsize)
+            if i % 2 == 1:
+                y += 66
+        y += 66
+    y += 20
+    font = get_font("hand" if hw else "regular", 16)
+    for i, line in enumerate(_wrap(DESCRIPTIONS[rec.incident_type], font, 820, c.draw)):
+        c.text((60, y), line, size=16, role="other", hand=hw, key=f"desc:{i}")
+        y += 28
+    y += 40
+    amounts = [(pick("deductible"), fmt_amount(rec.deductible, rec.amount_format), "distractor", "val:ded"),
+               (pick("total_form"), fmt_amount(rec.claimed_amount, rec.amount_format), "value", "val:total")]
+    rng.shuffle(amounts)
+    ax = rng.choice([60, 500])
+    for lab, val, role, key in amounts:
+        y += _place(c, ax, y, lab, val, mode, role, "total_amount", hw, key, vsize + 1)
+
+
+def _render_invoice_r(rec: ClaimRecord, c: _Canvas):
+    rng, d, af = c._rng("layout"), rec.date_format, rec.amount_format
+    mode = rng.choice(["beside", "below"])
+    left_provider = rng.random() < 0.5
+    px, tx = (50, 640) if left_provider else (560, 50)
+    c.text((px, 45), rec.provider_name, size=rng.randint(20, 26), kind="bold", role="value",
+           field_name="provider_name", key="val:provider")
+    c.text((px, 82), rec._prov_street, size=14, fill=GREY, role="other")
+    c.text((px, 102), f"{rec._prov_city} · {rec._prov_phone}", size=14, fill=GREY, role="other")
+    title = rng.choice(SYN["inv_title"])
+    if not left_provider:
+        tx = 50
+    else:  # right-align so long titles stay on the page
+        tx = 930 - c.draw.textlength(title, font=get_font("bold", 28))
+    c.text((tx, 50), title, size=28, kind="bold", role="header")
+    c.hline(40, 940, 140, fill=INK, width=2)
+    pick = lambda k: rng.choice(SYN[k])
+    bx, mx = (50, 520) if rng.random() < 0.5 else (520, 50)
+    y0 = 165
+    _place(c, bx, y0, pick("claimant_inv"), rec.claimant_name, mode, "value", "claimant_name", False, "val:name")
+    meta = [(pick("inv_no"), rec.invoice_number, "distractor", "claim_number", "val:invno"),
+            (pick("inv_date"), rec.invoice_date.strftime(d), "distractor", "date_of_loss", "val:invdate"),
+            (pick("loss_inv"), rec.date_of_loss.strftime(d), "value", "date_of_loss", "val:dos")]
+    if rec.show_claim_ref:
+        meta.append((pick("claim_number"), rec.claim_number, "value", "claim_number", "val:claim"))
+    if rec.show_policy_on_invoice:
+        meta.append((pick("policy_number"), rec.policy_number, "value", "policy_number", "val:policy"))
+    rng.shuffle(meta)
+    y = y0
+    for lab, val, role, f, key in meta:
+        y += _place(c, mx, y, lab, val, mode, role, f, False, key, 15) - (8 if mode == "beside" else 14)
+    y = max(y, y0 + 90) + 30
+    c.draw.rectangle([40, y, 940, y + 30], fill=(225, 225, 225))
+    c.text((52, y + 7), "Item", size=14, kind="bold", role="label")
+    c.text((800, y + 7), "Amount", size=14, kind="bold", role="label")
+    y += 42
+    for i, (desc, q, p) in enumerate(rec.line_items):
+        c.text((52, y), f"{desc} ({q})" if q > 1 else desc, size=15, role="other", key=f"li:{i}:d")
+        c.text((800, y), fmt_amount(q * p, af), size=15, role="distractor", field_name="total_amount", key=f"li:{i}:a")
+        y += 30
+    y += 30
+    tx0 = rng.choice([560, 600])
+    for lab, val, role, key in [(pick("subtotal"), fmt_amount(rec.subtotal, af), "distractor", "val:subtotal"),
+                                (pick("tax"), fmt_amount(rec.tax, af), "distractor", "val:tax"),
+                                (pick("total_inv"), fmt_amount(rec.invoice_total, af), "value", "val:total")]:
+        c.text((tx0, y), lab + ":", size=15, kind="bold", role="label", key=f"lbl:{key}")
+        c.text((800, y), val, size=16 if role == "distractor" else 18, kind="regular" if role == "distractor" else "bold",
+               role=role, field_name="total_amount", key=key)
+        y += 32
+
+
 # ---- degradation ("make it look scanned") --------------------------------
 def _rotate_point(x, y, cx, cy, deg):
     t = math.radians(deg)
@@ -548,14 +817,15 @@ def degrade(img: Image.Image, rec: ClaimRecord) -> Image.Image:
 def render(rec: ClaimRecord) -> tuple[Image.Image, dict]:
     """Draw the document; return (image, label dict)."""
     c = _Canvas(rec)
-    if rec.doc_type == "claim_form":
-        _render_claim_form(rec, c)
+    if rec.doc_type.startswith("claim_form"):
+        {"claim_form_b": _render_claim_form_b, "claim_form_r": _render_claim_form_r}.get(
+            rec.doc_type, _render_claim_form)(rec, c)
     else:
         prng = random.Random(_stable_seed(rec.render_seed, "provider-address"))
         rec._prov_street = f"{prng.randint(10, 999)} {prng.choice(STREETS)}"
         rec._prov_city = prng.choice(CITIES)
         rec._prov_phone = f"({prng.randint(200, 989)}) {prng.randint(200, 989)}-{prng.randint(0, 9999):04d}"
-        _render_invoice(rec, c)
+        {"invoice_b": _render_invoice_b, "invoice_r": _render_invoice_r}.get(rec.doc_type, _render_invoice)(rec, c)
     img = degrade(c.img, rec)
 
     for seg in c.layout:
@@ -650,6 +920,35 @@ def generate_fairness_split(out: Path, n_sets: int, variants: int, seed: int) ->
     return rows
 
 
+def generate_holdout_split(out: Path, n: int, seed: int) -> list[dict]:
+    """Documents in the held-out templates only (alternating form / statement)."""
+    split_dir = out / "holdout"
+    (split_dir / "images").mkdir(parents=True, exist_ok=True)
+    (split_dir / "labels").mkdir(parents=True, exist_ok=True)
+    rows = []
+    for i in range(n):
+        rec = make_record(f"holdout-{i:05d}", _stable_seed(seed, "holdout", i), doc_type=HOLDOUT_TYPES[i % 2])
+        rows.append(_write_doc(split_dir, rec))
+    _write_manifest(split_dir, rows)
+    return rows
+
+
+def generate_rl_split(out: Path, n: int, seed: int, random_share: float = 0.8) -> list[dict]:
+    """Phase 3 training pool: mostly randomised layouts, plus some original ones
+    so the model does not forget what it already does well."""
+    split_dir = out / "rl"
+    (split_dir / "images").mkdir(parents=True, exist_ok=True)
+    (split_dir / "labels").mkdir(parents=True, exist_ok=True)
+    rows = []
+    for i in range(n):
+        rng = random.Random(_stable_seed(seed, "rl-type", i))
+        pool = RANDOM_TYPES if rng.random() < random_share else ("claim_form", "invoice")
+        rec = make_record(f"rl-{i:05d}", _stable_seed(seed, "rl", i), doc_type=rng.choice(pool))
+        rows.append(_write_doc(split_dir, rec))
+    _write_manifest(split_dir, rows)
+    return rows
+
+
 def _write_manifest(split_dir: Path, rows: list[dict]):
     with open(split_dir / "manifest.jsonl", "w", encoding="utf-8") as f:
         for r in rows:
@@ -657,7 +956,7 @@ def _write_manifest(split_dir: Path, rows: list[dict]):
 
 
 def generate_dataset(out: str | Path, n_train=200, n_val=50, n_test=100, n_fair_sets=25, fair_variants=4,
-                     seed=1234) -> dict:
+                     seed=1234, n_holdout=0, n_rl=0) -> dict:
     out = Path(out)
     out.mkdir(parents=True, exist_ok=True)
     counts = {}
@@ -666,6 +965,10 @@ def generate_dataset(out: str | Path, n_train=200, n_val=50, n_test=100, n_fair_
             counts[split] = len(generate_split(out, split, n, seed))
     if n_fair_sets > 0:
         counts["fairness"] = len(generate_fairness_split(out, n_fair_sets, fair_variants, seed))
+    if n_holdout > 0:
+        counts["holdout"] = len(generate_holdout_split(out, n_holdout, seed))
+    if n_rl > 0:
+        counts["rl"] = len(generate_rl_split(out, n_rl, seed))
     info = {
         "generator_version": GENERATOR_VERSION,
         "seed": seed,
@@ -674,6 +977,8 @@ def generate_dataset(out: str | Path, n_train=200, n_val=50, n_test=100, n_fair_
         "fonts_used": dict(FONTS_USED),
         "split_hashes": {s: _sha256_dir(out / s) for s in counts},
         "fields": FIELD_NAMES,
+        "holdout_templates": list(HOLDOUT_TYPES) if n_holdout > 0 else [],
+        "rl_templates": list(RANDOM_TYPES) if n_rl > 0 else [],
     }
     (out / "dataset_info.json").write_text(json.dumps(info, indent=2), encoding="utf-8")
     return info

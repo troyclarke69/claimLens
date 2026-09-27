@@ -1,0 +1,283 @@
+{
+  "production": "sft_v2ctrl",
+  "models": {
+    "baseline": {
+      "base_model": "Qwen/Qwen2.5-VL-3B-Instruct",
+      "adapters": [],
+      "trained_by": null,
+      "evaluations": {
+        "fairness": {
+          "run_id": "baseline_v2_greedy_fairness",
+          "evaluator_version": "1.1",
+          "field_accuracy": 0.9343,
+          "grounded_accuracy": 0.3292,
+          "hallucination_rate": 0.1212,
+          "miss_rate": 0.0,
+          "doc_exact_match": 0.58,
+          "mean_reward": 0.8025,
+          "latency_ms_p50": 29639.3,
+          "counterfactual_consistency": 0.92
+        },
+        "holdout": {
+          "run_id": "baseline_v2_greedy_holdout",
+          "evaluator_version": "1.1",
+          "field_accuracy": 0.9014,
+          "grounded_accuracy": 0.3819,
+          "hallucination_rate": 0.0874,
+          "miss_rate": 0.0369,
+          "doc_exact_match": 0.53,
+          "mean_reward": 0.7738,
+          "latency_ms_p50": 23515.0
+        },
+        "test": {
+          "run_id": "baseline_v2_greedy_test",
+          "evaluator_version": "1.1",
+          "field_accuracy": 0.93,
+          "grounded_accuracy": 0.3759,
+          "hallucination_rate": 0.0714,
+          "miss_rate": 0.0034,
+          "doc_exact_match": 0.64,
+          "mean_reward": 0.8046,
+          "latency_ms_p50": 30467.1
+        }
+      }
+    },
+    "grpo_v1": {
+      "base_model": "Qwen/Qwen2.5-VL-3B-Instruct",
+      "base_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+      "adapters": [
+        {
+          "name": "sft_v1",
+          "sha256": "4c7f38d94a4d9794"
+        },
+        {
+          "name": "grpo_v1",
+          "sha256": "7c67a0ea535bac43"
+        }
+      ],
+      "trained_by": "grpo",
+      "quick_test": false,
+      "evaluations": {
+        "holdout": {
+          "run_id": "grpo_v1_v2_greedy_holdout",
+          "evaluator_version": "1.1",
+          "field_accuracy": 0.8986,
+          "grounded_accuracy": 0.8291,
+          "hallucination_rate": 0.0194,
+          "miss_rate": 0.067,
+          "doc_exact_match": 0.45,
+          "mean_reward": 0.8877,
+          "latency_ms_p50": 22927.6
+        },
+        "test": {
+          "run_id": "grpo_v1_v2_greedy_test",
+          "evaluator_version": "1.1",
+          "field_accuracy": 0.9714,
+          "grounded_accuracy": 0.9592,
+          "hallucination_rate": 0.0,
+          "miss_rate": 0.0,
+          "doc_exact_match": 0.85,
+          "mean_reward": 0.9704,
+          "latency_ms_p50": 23922.7
+        }
+      }
+    },
+    "sft_v1": {
+      "base_model": "Qwen/Qwen2.5-VL-3B-Instruct",
+      "base_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+      "adapters": [
+        {
+          "name": "sft_v1",
+          "sha256": "4c7f38d94a4d9794"
+        }
+      ],
+      "trained_by": "sft",
+      "quick_test": false,
+      "evaluations": {
+        "fairness": {
+          "run_id": "sft_v1_v2_greedy_fairness",
+          "evaluator_version": "1.1",
+          "field_accuracy": 0.9743,
+          "grounded_accuracy": 0.9683,
+          "hallucination_rate": 0.0,
+          "miss_rate": 0.0,
+          "doc_exact_match": 0.84,
+          "mean_reward": 0.9753,
+          "latency_ms_p50": 24329.0,
+          "counterfactual_consistency": 1.0
+        },
+        "holdout": {
+          "run_id": "sft_v1_v2_greedy_holdout",
+          "evaluator_version": "1.1",
+          "field_accuracy": 0.8986,
+          "grounded_accuracy": 0.8442,
+          "hallucination_rate": 0.0485,
+          "miss_rate": 0.0519,
+          "doc_exact_match": 0.49,
+          "mean_reward": 0.8918,
+          "latency_ms_p50": 22899.2
+        },
+        "test": {
+          "run_id": "sft_v1_v2_greedy_test",
+          "evaluator_version": "1.1",
+          "field_accuracy": 0.97,
+          "grounded_accuracy": 0.9609,
+          "hallucination_rate": 0.0,
+          "miss_rate": 0.0,
+          "doc_exact_match": 0.84,
+          "mean_reward": 0.9701,
+          "latency_ms_p50": 24358.2
+        }
+      }
+    },
+    "sft_v2ctrl": {
+      "base_model": "Qwen/Qwen2.5-VL-3B-Instruct",
+      "base_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+      "adapters": [
+        {
+          "name": "sft_v1",
+          "sha256": "4c7f38d94a4d9794"
+        },
+        {
+          "name": "sft_v2ctrl",
+          "sha256": "502bdd24f7921290"
+        }
+      ],
+      "trained_by": "control",
+      "quick_test": false,
+      "evaluations": {
+        "holdout": {
+          "run_id": "sft_v2ctrl_v2_greedy_holdout",
+          "evaluator_version": "1.1",
+          "field_accuracy": 0.9286,
+          "grounded_accuracy": 0.8643,
+          "hallucination_rate": 0.0291,
+          "miss_rate": 0.0385,
+          "doc_exact_match": 0.63,
+          "mean_reward": 0.9167,
+          "latency_ms_p50": 22493.7
+        },
+        "test": {
+          "run_id": "sft_v2ctrl_v2_greedy_test",
+          "evaluator_version": "1.1",
+          "field_accuracy": 0.9743,
+          "grounded_accuracy": 0.9609,
+          "hallucination_rate": 0.0,
+          "miss_rate": 0.0,
+          "doc_exact_match": 0.87,
+          "mean_reward": 0.974,
+          "latency_ms_p50": 23126.9
+        }
+      }
+    }
+  },
+  "changelog": [
+    {
+      "utc": "2026-09-27T18:25:13.888502+00:00",
+      "user": "tclar",
+      "from": null,
+      "to": "sft_v1",
+      "reason": "first fine-tuned model",
+      "gate_passed": true,
+      "forced": false,
+      "gate": [
+        {
+          "split": "test",
+          "metric": "field_accuracy",
+          "candidate": 0.97,
+          "production": null,
+          "result": "pass (no production yet)"
+        },
+        {
+          "split": "test",
+          "metric": "grounded_accuracy",
+          "candidate": 0.9609,
+          "production": null,
+          "result": "pass (no production yet)"
+        },
+        {
+          "split": "test",
+          "metric": "hallucination_rate",
+          "candidate": 0.0,
+          "production": null,
+          "result": "pass (no production yet)"
+        },
+        {
+          "split": "holdout",
+          "metric": "field_accuracy",
+          "candidate": 0.8986,
+          "production": null,
+          "result": "pass (no production yet)"
+        },
+        {
+          "split": "holdout",
+          "metric": "grounded_accuracy",
+          "candidate": 0.8442,
+          "production": null,
+          "result": "pass (no production yet)"
+        },
+        {
+          "split": "holdout",
+          "metric": "hallucination_rate",
+          "candidate": 0.0485,
+          "production": null,
+          "result": "pass (no production yet)"
+        }
+      ]
+    },
+    {
+      "utc": "2026-09-27T18:25:14.091491+00:00",
+      "user": "tclar",
+      "from": "sft_v1",
+      "to": "sft_v2ctrl",
+      "reason": "better held-out generalisation",
+      "gate_passed": true,
+      "forced": false,
+      "gate": [
+        {
+          "split": "test",
+          "metric": "field_accuracy",
+          "candidate": 0.9743,
+          "production": 0.97,
+          "result": "pass"
+        },
+        {
+          "split": "test",
+          "metric": "grounded_accuracy",
+          "candidate": 0.9609,
+          "production": 0.9609,
+          "result": "pass"
+        },
+        {
+          "split": "test",
+          "metric": "hallucination_rate",
+          "candidate": 0.0,
+          "production": 0.0,
+          "result": "pass"
+        },
+        {
+          "split": "holdout",
+          "metric": "field_accuracy",
+          "candidate": 0.9286,
+          "production": 0.8986,
+          "result": "pass"
+        },
+        {
+          "split": "holdout",
+          "metric": "grounded_accuracy",
+          "candidate": 0.8643,
+          "production": 0.8442,
+          "result": "pass"
+        },
+        {
+          "split": "holdout",
+          "metric": "hallucination_rate",
+          "candidate": 0.0291,
+          "production": 0.0485,
+          "result": "pass"
+        }
+      ]
+    }
+  ],
+  "built_utc": "2026-09-27T18:25:13.647703+00:00"
+}

@@ -43,7 +43,7 @@ def test_rotated_bbox_contains_ink():
 
 
 def test_render_labels_are_consistent():
-    for i, doc_type in enumerate(["claim_form", "invoice"]):
+    for i, doc_type in enumerate(["claim_form", "invoice", "claim_form_b", "invoice_b"]):
         rec = make_record(f"t{i}", 42 + i, doc_type=doc_type)
         img, label = render(rec)
         assert img.size == (PAGE_W, PAGE_H)
@@ -175,3 +175,40 @@ def test_sft_targets_and_oversampling(tmp_path):
     res = score_document(ex[0]["target"], label)
     assert res["schema_valid"] and res["all_correct"]
     assert all(line.count('"') for line in ex[0]["target"].splitlines()[1:-1])  # one field per line
+
+
+def test_holdout_split_uses_only_unseen_templates(tmp_path):
+    from claimlens.generator import HOLDOUT_TYPES, generate_dataset
+    info = generate_dataset(tmp_path, n_train=10, n_val=0, n_test=0, n_fair_sets=0, n_holdout=6)
+    rows = [json.loads(l) for l in (tmp_path / "holdout" / "manifest.jsonl").read_text().splitlines()]
+    assert {r["doc_type"] for r in rows} == set(HOLDOUT_TYPES)
+    train = [json.loads(l) for l in (tmp_path / "train" / "manifest.jsonl").read_text().splitlines()]
+    assert not {r["doc_type"] for r in train} & set(HOLDOUT_TYPES)
+    for r in rows:  # perfect answers score perfectly on the new layouts too
+        label = json.loads((tmp_path / "holdout" / r["label"]).read_text())
+        assert score_document(_perfect_output(label), label)["all_correct"]
+
+
+def test_randomised_templates_are_consistent_and_avoid_holdout_wording():
+    from claimlens.generator import SYN
+    holdout_words = ["our reference", "nature of loss", "insured / claimant", "loss date", "account no",
+                     "balance due", "statement date", "treatment / service date", "amount of claim", "policy excess"]
+    for syns in SYN.values():
+        for w in syns:
+            assert not any(h == w.lower() or h in w.lower() for h in holdout_words), w
+    for i in range(10):
+        _, label = render(make_record(f"r{i}", 700 + i, doc_type=["claim_form_r", "invoice_r"][i % 2]))
+        assert score_document(_perfect_output(label), label)["all_correct"]
+
+
+def test_costed_reward_orders_behaviours_sensibly():
+    from claimlens.evaluation import costed_reward
+    _, label = render(make_record("cr", 21, doc_type="claim_form"))
+    perfect = json.loads(_perfect_output(label))
+    miss = dict(perfect, claim_number=None)
+    wrong = dict(perfect, claim_number=dict(perfect["claim_number"], value="C-00000000"))
+    all_null = {k: None for k in perfect}
+    r = lambda o: costed_reward(json.dumps(o), label)["reward"]
+    assert r(perfect) > r(miss) > r(wrong)      # an honest null beats a wrong value
+    assert r(all_null) < 0 < r(perfect)          # "say null everywhere" is not a winning strategy
+    assert costed_reward("garbage", label)["reward"] == -1.0

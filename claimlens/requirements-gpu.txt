@@ -1,6 +1,0 @@
-# Extra packages for running real models (Kaggle / Colab GPU). Kaggle already ships torch.
-torch
-transformers>=4.49
-accelerate
-bitsandbytes   # optional: 4-bit loading
-peft           # Phase 2: LoRA adapters

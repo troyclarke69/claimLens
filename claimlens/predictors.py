@@ -159,7 +159,8 @@ class HFVisionPredictor(Predictor):
 
     def __init__(self, model_id: str = "Qwen/Qwen2.5-VL-3B-Instruct", max_new_tokens: int = 900,
                  dtype: str = "float16", load_in_4bit: bool = False, max_pixels: Optional[int] = None,
-                 adapter_path: Optional[str] = None, prompt_version: str = PROMPT_VERSION,
+                 adapter_path=None, prompt_version: str = PROMPT_VERSION,
+                 expected_fingerprints: Optional[list] = None,
                  finish_json: bool = False):
         """finish_json=True blocks the end-of-turn token until every { and [ the
         model opened has been closed (a light form of constrained decoding)."""
@@ -185,14 +186,21 @@ class HFVisionPredictor(Predictor):
         else:
             kwargs["torch_dtype"] = getattr(torch, dtype) if torch.cuda.is_available() else torch.float32
         self.model = AutoModelForImageTextToText.from_pretrained(model_id, **kwargs)
-        if adapter_path:  # Phase 2: LoRA adapter produced by SFT
-            from peft import PeftModel
-            self.model = PeftModel.from_pretrained(self.model, adapter_path)
-        self.model.eval()
         cfg = getattr(self.model, "config", None)
         self.model_revision = getattr(cfg, "_commit_hash", None) or "unknown"
-        if adapter_path:
-            self.model_revision += f"+adapter:{Path(adapter_path).name}"
+        # One adapter, or a stack (e.g. sft_v1 then sft_v2ctrl), merged in order.
+        paths = [adapter_path] if isinstance(adapter_path, (str, Path)) else list(adapter_path or [])
+        if paths:
+            from peft import PeftModel
+
+            from .sft import adapter_fingerprint
+            for i, pth in enumerate(paths):
+                fp = adapter_fingerprint(pth)
+                if expected_fingerprints and expected_fingerprints[i] and fp != expected_fingerprints[i]:
+                    raise RuntimeError(f"adapter {pth} fingerprint {fp} != registry {expected_fingerprints[i]}")
+                self.model = PeftModel.from_pretrained(self.model, str(pth)).merge_and_unload()
+                self.model_revision += f"+{Path(pth).name}@{fp}"
+        self.model.eval()
 
     @classmethod
     def from_model(cls, model, processor, model_id: str, model_revision: str, max_new_tokens: int = 900,
@@ -284,3 +292,48 @@ def _rescale_bboxes(raw: str, sx: float, sy: float) -> str:
             except (TypeError, ValueError):
                 pass
     return json.dumps(obj, ensure_ascii=False)
+
+
+
+# --------------------------------------------------------------------------
+class AnthropicPredictor(Predictor):
+    """A hosted model via the Anthropic API -- the "buy" side of build-vs-buy.
+
+    Needs `pip install anthropic` and an ANTHROPIC_API_KEY. Costs real money
+    (a few tenths of a cent per document for a small model; see
+    docs/BUILD_VS_BUY.md), so start with --limit. Uses the same prompt as the
+    open model so the comparison is like-for-like. Records token usage so
+    `python -m claimlens cost` can compute the actual spend.
+
+    Note: the hosted model may resize the image before it sees it; the prompt
+    states the original size, and we ask for boxes in original pixels.
+    """
+
+    def __init__(self, model_id: str = "claude-haiku-4-5", max_tokens: int = 1024,
+                 prompt_version: str = PROMPT_VERSION):
+        import anthropic
+
+        self.client = anthropic.Anthropic()
+        self.model_id = model_id
+        self.model_revision = model_id
+        self.max_tokens = max_tokens
+        self.prompt_version = prompt_version
+
+    def predict(self, image_path: Path, label: dict) -> dict:
+        import base64
+
+        from PIL import Image
+
+        w, h = Image.open(image_path).size
+        data = base64.standard_b64encode(Path(image_path).read_bytes()).decode()
+        media = "image/png" if str(image_path).lower().endswith(".png") else "image/jpeg"
+        t0 = time.perf_counter()
+        msg = self.client.messages.create(
+            model=self.model_id, max_tokens=self.max_tokens, temperature=0,
+            messages=[{"role": "user", "content": [
+                {"type": "image", "source": {"type": "base64", "media_type": media, "data": data}},
+                {"type": "text", "text": build_prompt(w, h, self.prompt_version)}]}])
+        latency = (time.perf_counter() - t0) * 1000
+        text = "".join(b.text for b in msg.content if getattr(b, "type", "") == "text")
+        return {"raw_text": text, "latency_ms": round(latency, 1), "input_tokens": msg.usage.input_tokens,
+                "output_tokens": msg.usage.output_tokens, "hosted_model": msg.model}

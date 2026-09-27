@@ -1,8 +1,0 @@
-# Core: data generation, evaluation, audit log, error analysis. Runs on any laptop CPU.
-pillow>=10.1
-numpy>=1.24
-pydantic>=2.5
-pandas>=2.0
-matplotlib>=3.7
-jupyter
-pytest

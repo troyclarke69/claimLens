@@ -7,6 +7,10 @@ venv/
 
 # Generated -- recreate with `python -m claimlens generate`
 data/
-# Run outputs (commit selected reports by hand if you want them in the repo)
+data_*/
+old_local/
+adapters/
 runs/
 *.zip
+
+ClaimLens Interview Prep.md

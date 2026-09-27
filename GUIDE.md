@@ -271,3 +271,106 @@ Phase 1 inspection showed `POL. 214-4955 F` marked wrong against `POL-214-4955-F
 ID. Changing scoring rules *after* seeing results is acceptable only if you version the rules, document why, and
 re-score every run, baseline included, so the comparison stays fair. Scores are recomputed from the audit logs,
 so that's one command per run and needs no GPU.
+
+---
+
+## 8. Phase 3: reinforcement learning (GRPO), explained
+
+### SFT vs RL in one sentence each
+
+- **SFT:** "here is the right answer, copy it."
+- **RL:** "try a few answers, and I'll tell you which ones scored better."
+
+RL needs no answer to copy, only a way to score. That lets it optimise things imitation can't express, such as
+*how bad* each kind of mistake is.
+
+### How GRPO works here, step by step
+
+1. Take one training document. The model writes **4 answers**, with a little randomness (temperature 0.9) so
+   they differ.
+2. Score each with the **cost-weighted reward**: correct +1, correct null +1, miss −0.5, wrong or invented −1.
+3. Compare each answer to the **group average**. Above average means "do more of this"; below average means
+   "do less". This is the "group relative" part: no separate critic model is needed, which saves memory.
+4. Nudge the weights accordingly, plus a **KL penalty** that grows if the model drifts too far from the SFT
+   model it started from.
+5. Repeat for the next document.
+
+### Why the costs matter (the business point)
+
+In claims, an honest "not found" goes to a human to fill in. A confidently *wrong* claim number flows downstream
+and can attach evidence to the wrong claim. So a wrong value costs −1 and a miss only −0.5. Change those numbers
+and you change the model's behaviour: that's a product decision, written down, versioned and auditable. SFT has
+no knob for this.
+
+### Reward hacking: what we watch for
+
+| Hack | How it would look | Why our reward resists it |
+|---|---|---|
+| Say `null` everywhere | `null_fields_mean` climbs | Misses cost −0.5 each; "all null" scores below 0 (there's a test for this) |
+| Draw giant boxes to "cover" the value | `box_area_mean` balloons | Half the grounding credit is IoU, and a giant box has tiny IoU |
+| Drift into odd outputs the scorer likes | `kl` grows | The KL penalty pulls it back toward SFT |
+| Stop writing mid-JSON | Unparseable answers | −1 for the whole answer |
+
+### Why the control run matters
+
+GRPO trains on **new documents** (randomised layouts). If it improves the held-out score, is that RL, or just the
+new data? The control run trains **the same starting model on the same 80 documents** with plain SFT. The
+comparison is:
+
+- **Control vs SFT v1:** what the new data alone gives.
+- **GRPO vs control:** what RL adds *beyond* the data.
+
+That's the difference between "I tried RL and numbers went up" and "I showed what RL itself contributed".
+
+### What to expect (honest)
+
+This is a small RL run: 80 documents × 4 samples, on a free GPU. RL usually needs more samples than SFT to shine.
+Plausible outcomes:
+
+- **GRPO lowers misses on unfamiliar labels while keeping hallucinations near zero** (the cost-weighting doing
+  its job). That's the best case.
+- **GRPO roughly matches the control:** at this scale, the data mattered more than the method. That's still a
+  valid, reportable finding.
+- **GRPO is worse on something:** check the hacking signals and the KL. RL is less stable than SFT, and finding
+  that out is part of the lesson.
+
+Any of these, explained with evidence, is a strong interview story.
+
+---
+
+## 9. Phase 4: from notebook to service
+
+### The service (`claimlens/service.py`)
+
+- **`POST /v1/extract`** takes a document image and returns each field with its evidence, plus:
+  - **Review flags:** reasons a human should check this document before it's used. The output was unparseable;
+    a required field (claimant, date of loss, total) is missing; a value has no citation box; or a value doesn't
+    match its own evidence text (for example the model says `2025-03-14` but quotes `2025-03-17`). In a claims
+    workflow, flagged documents go to a human queue or a stronger model. The model is never trusted blindly.
+  - **An audit receipt:** the hash of this request's record in the same tamper-evident log used for evaluation.
+- **`GET /v1/model`** reports exactly which model is serving: base revision, adapter fingerprints, prompt hash and
+  evaluator version.
+- **The model is loaded once, at startup.** Loading a 3B model takes about a minute. You never do it per request.
+
+### The registry and release gate (`claimlens/registry.py`)
+
+- `registry build` assembles the registry from what the project already records: each adapter's **training card**
+  (what it was trained from, and on) and each run's **metrics**. Nothing is typed by hand, so nothing drifts.
+- `registry promote <model>` runs the **release gate**. The candidate must not be worse than production on
+  accuracy, grounding or hallucination rate, on both the test and held-out sets, scored by the same evaluator
+  version. It also refuses adapters from quick-test runs.
+- Every promotion, including forced overrides, goes into a **changelog** with who, when and why.
+
+**Interview line:** "Model releases go through the same discipline as code releases: versioned artefacts, an
+automated gate on agreed metrics, and a recorded decision."
+
+### Docker
+
+The `Dockerfile` builds a small CPU image that runs the demo service. It runs as a non-root user and includes a
+health check. Build arguments switch it to a CUDA base image with the GPU libraries for serving the real model.
+
+### Build vs buy
+
+See `docs/BUILD_VS_BUY.md`. In short: at measured throughput, cost is roughly a wash against a small hosted model.
+Data residency, reproducibility and the ability to fine-tune decide it. An optional hosted predictor
+(`--predictor anthropic`) lets you measure the other side with the *same* harness for a few cents.

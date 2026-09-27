@@ -384,3 +384,52 @@ def fairness_metrics(results: list[dict], manifest: dict[str, dict]) -> dict:
         "counterfactual_flip_rate_by_field": {f: round(flips[f] / n_sets, 4) for f in FIELD_NAMES
                                               if f != "claimant_name"} if n_sets else {},
     }
+
+
+# --------------------------------------------------------------------------
+# Phase 3: cost-weighted reward for RL
+# --------------------------------------------------------------------------
+# SFT can only imitate answers. An RL reward can say *how bad* each kind of
+# mistake is -- a business decision, written down in one place. For claims,
+# a wrong or invented value is worse than an honest "not found" (a human can
+# fill a gap; a confidently wrong claim number flows downstream).
+DEFAULT_COSTS = {
+    "correct": 1.0,          # right value (scaled by grounding quality, see below)
+    "correct_null": 1.0,     # correctly said "not on the page"
+    "miss": -0.5,            # said null, but the value IS on the page
+    "wrong": -1.0,           # gave the wrong value
+    "hallucination": -1.0,   # gave a value for a field that is not on the page
+    "invalid": -1.0,         # output could not be parsed at all
+}
+GROUNDING_SHARE = 0.5  # share of a correct field's credit that depends on citing the right place
+
+
+def costed_reward(raw_text: str, label: dict, costs: Optional[dict] = None) -> dict:
+    """Reward in [-1, 1] plus its breakdown (logged, so reward hacking is visible)."""
+    costs = {**DEFAULT_COSTS, **(costs or {})}
+    res = score_document(raw_text, label)
+    if not res["json_valid"]:
+        return {"reward": costs["invalid"], "counts": {"invalid": 1}, "doc": res}
+    total, counts = 0.0, Counter()
+    for f in res["fields"].values():
+        et = f["error_type"]
+        if et == "correct":
+            ground = 0.5 * f["evidence_supported"] + 0.5 * min(1.0, f["iou"] / IOU_THRESHOLD)
+            total += costs["correct"] * ((1 - GROUNDING_SHARE) + GROUNDING_SHARE * ground)
+            counts["correct"] += 1
+        elif et == "correct_null":
+            total += costs["correct_null"]
+            counts["correct_null"] += 1
+        elif et == "missed":
+            total += costs["miss"]
+            counts["miss"] += 1
+        elif et in ("hallucinated", "distractor_for_absent"):
+            total += costs["hallucination"]
+            counts["hallucination"] += 1
+        else:
+            total += costs["wrong"]
+            counts["wrong"] += 1
+    reward = total / len(res["fields"])
+    if not res["schema_valid"]:
+        reward -= 0.1  # small nudge toward the exact format
+    return {"reward": round(max(-1.0, min(1.0, reward)), 4), "counts": dict(counts), "doc": res}
