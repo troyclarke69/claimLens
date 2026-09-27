@@ -37,6 +37,14 @@ def test_extract_returns_fields_review_and_receipt(client):
     assert client.get("/v1/model").json()["name"] == "simulated-predictor"
 
 
+def test_cors_allows_the_web_demo_only(client):
+    ok = client.options("/v1/extract", headers={"Origin": "https://troyclarke69.github.io",
+                                                "Access-Control-Request-Method": "POST"})
+    assert ok.status_code == 200 and ok.headers["access-control-allow-origin"] == "https://troyclarke69.github.io"
+    other = client.get("/v1/health", headers={"Origin": "https://example.com"})
+    assert "access-control-allow-origin" not in other.headers
+
+
 def test_extract_requires_doc_id_in_demo_mode(client):
     img = client.data_dir / "test" / "images" / "test-00001.jpg"
     r = client.post("/v1/extract", files={"file": ("x.jpg", img.read_bytes(), "image/jpeg")})

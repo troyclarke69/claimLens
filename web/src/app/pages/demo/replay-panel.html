@@ -1,0 +1,76 @@
+@if (bundle.error()) {
+  <p class="error">Could not load the replay data.</p>
+} @else if (doc(); as d) {
+  <div class="layout">
+    <nav class="docs" aria-label="Sample documents">
+      @for (item of docs(); track item.doc_id) {
+        <button class="doc" [class.active]="item.doc_id === d.doc_id" (click)="pick(item.doc_id, undefined)" [attr.aria-current]="item.doc_id === d.doc_id">
+          <img [src]="item.image" alt="" loading="lazy" />
+          <span class="meta">
+            <span class="id">{{ item.doc_id }}</span>
+            <span class="badges">
+              <span class="badge">{{ docTypeLabel(item.doc_type) }}</span>
+              @if (item.split === 'holdout') {
+                <span class="badge unseen">unseen layout</span>
+              }
+            </span>
+          </span>
+        </button>
+      }
+    </nav>
+
+    <div class="main">
+      <p class="note"><strong>{{ d.doc_id }}.</strong> {{ d.note }}</p>
+
+      <div class="toolbar">
+        <div class="tabs" role="tablist" aria-label="Model">
+          @for (m of models(); track m.key) {
+            @let p = d.predictions[m.key];
+            <button role="tab" [attr.aria-selected]="m.key === model()" (click)="pick(undefined, m.key)">
+              <span>{{ m.label }}</span>
+              <span class="score" [class.perfect]="p.scores.all_correct && p.scores.grounded_accuracy === 1">
+                {{ p.scores.field_accuracy | percent }} right · {{ p.scores.grounded_accuracy | percent }} grounded
+              </span>
+            </button>
+          }
+        </div>
+        <label class="toggle">
+          <input type="checkbox" [checked]="showGold()" (change)="showGold.set(!showGold())" />
+          Show ground-truth boxes
+        </label>
+      </div>
+
+      @if (prediction(); as p) {
+        <div class="grid">
+          <div class="viewer-col">
+            <app-document-viewer
+              [doc]="viewerDoc()!"
+              [fields]="p.response.fields"
+              [scores]="p.scores.fields"
+              [gold]="showGold() ? d.gold : null"
+              [alt]="d.doc_id"
+              [(selected)]="selectedField"
+            />
+            <p class="legend">
+              <span class="sw good"></span> correct &amp; well cited
+              <span class="sw warn"></span> near miss or box off
+              <span class="sw bad"></span> wrong
+              @if (showGold()) {
+                <span class="sw gold"></span> ground truth
+              }
+            </p>
+          </div>
+          <app-extraction-result
+            [response]="p.response"
+            [scores]="p.scores.fields"
+            [gold]="d.gold"
+            [rawOutput]="p.raw_output"
+            [(selected)]="selectedField"
+          />
+        </div>
+      }
+    </div>
+  </div>
+} @else {
+  <p class="muted">Loading real model outputs…</p>
+}

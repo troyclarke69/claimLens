@@ -1,0 +1,138 @@
+<section class="hero">
+  <p class="eyebrow">Fine-tuning a vision-language model for a regulated domain</p>
+  <h1>Evidence-cited extraction from insurance claim documents</h1>
+  <p class="lede">
+    ClaimLens reads a scanned claim form or invoice and returns structured fields in which every value carries its
+    evidence: the text it read and the box on the page it read it from. I fine-tuned Qwen2.5-VL-3B with supervised
+    fine-tuning (SFT) and reinforcement learning (GRPO) on a free GPU, and measured what each actually contributed.
+  </p>
+  <div class="cta">
+    <a routerLink="/demo" class="btn primary">Open the demo</a>
+    <a href="https://github.com/troyclarke69/claimLens" class="btn" target="_blank" rel="noopener">Code on GitHub</a>
+  </div>
+</section>
+
+<section class="stats" aria-label="Headline results">
+  <div class="stat">
+    <span class="big">38% → 96%</span>
+    <span>grounded accuracy after SFT: right value <em>and</em> citation on the right spot</span>
+  </div>
+  <div class="stat">
+    <span class="big">7.1% → 0%</span>
+    <span>invented values on the test set</span>
+  </div>
+  <div class="stat">
+    <span class="big">49% → 63%</span>
+    <span>exact match on layouts never seen in training, from more diverse data</span>
+  </div>
+  <div class="stat">
+    <span class="big">92% → 100%</span>
+    <span>counterfactual consistency: identical output when only the claimant's name changes</span>
+  </div>
+</section>
+
+<section>
+  <h2>Results</h2>
+  <p class="muted">
+    Qwen2.5-VL-3B-Instruct with LoRA adapters on a Kaggle T4. 100 test documents (layouts seen in training) and 100
+    held-out documents (two layouts and label wordings never seen). Best in each column in bold.
+  </p>
+  @if (table(); as rows) {
+    <div class="table-wrap">
+      <table class="results">
+        <thead>
+          <tr>
+            <th rowspan="2" scope="col">Model</th>
+            <th colspan="2" scope="colgroup" class="group">Test</th>
+            <th colspan="5" scope="colgroup" class="group">Held-out layouts</th>
+          </tr>
+          <tr>
+            @for (c of columns; track $index) {
+              <th scope="col" class="num">{{ c.label }}</th>
+            }
+          </tr>
+        </thead>
+        <tbody>
+          @for (r of rows; track r.key) {
+            <tr [class.prod]="r.production">
+              <th scope="row">
+                {{ r.label }}
+                @if (r.production) {
+                  <span class="tag">production</span>
+                }
+                <span class="detail">{{ r.detail }}</span>
+              </th>
+              @for (cell of r.cells; track $index) {
+                <td class="num" [class.best]="cell.best">{{ cell.value === null ? '—' : (cell.value | percent: '1.1-1') }}</td>
+              }
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+  } @else if (loading()) {
+    <p class="muted">Loading results…</p>
+  }
+</section>
+
+<section>
+  <h2>What I found</h2>
+  <ol class="findings">
+    <li>
+      <strong>Prompting has limits.</strong> A better prompt took valid JSON from 50% to 100%, but the base model still
+      copied the invoice number into a missing claim number on every such invoice. Labelled examples removed it.
+    </li>
+    <li>
+      <strong>SFT fixed behaviour, not perception.</strong> Grounding and hallucinations improved dramatically, but
+      single-character misreads of long IDs barely moved. The vision encoder was frozen.
+    </li>
+    <li>
+      <strong>Held-out layouts exposed shortcut learning.</strong> The model had partly learned label
+      <em>wording</em>: under "Our reference", claim-number misses nearly doubled. Randomised layouts fixed most of it.
+    </li>
+    <li>
+      <strong>With a control run, RL became a trade-off.</strong> GRPO cut hallucinations further but missed more;
+      SFT on the same documents beat it on almost everything else. RL moved the caution/coverage balance, which is
+      what its cost-weighted reward encoded.
+    </li>
+    <li>
+      <strong>The fairness test found a robustness bug, not bias.</strong> Name-induced changes were unstable digit
+      reads, not a consistent disadvantage for any group.
+    </li>
+  </ol>
+</section>
+
+<section>
+  <h2>How it's built</h2>
+  <div class="pipeline">
+    <div class="step">
+      <h3>Synthetic data</h3>
+      <p>Claim forms and invoices with exact labels, scan noise and deliberate traps. Name-swapped fairness sets and held-out layouts.</p>
+    </div>
+    <div class="step">
+      <h3>Evaluation harness</h3>
+      <p>Accuracy, grounding (IoU ≥ 0.5), hallucination, misses and an error taxonomy. Versioned; the same code is the RL reward.</p>
+    </div>
+    <div class="step">
+      <h3>SFT + GRPO</h3>
+      <p>LoRA on the language layers. GRPO with a reward where a wrong value costs twice an honest “not found”.</p>
+    </div>
+    <div class="step">
+      <h3>Audit &amp; release</h3>
+      <p>Hash-chained log of every prediction, fingerprinted adapters, a registry with a release gate.</p>
+    </div>
+    <div class="step">
+      <h3>Service</h3>
+      <p>FastAPI <code>POST /v1/extract</code> returns fields, human-review flags and an audit receipt. Dockerised.</p>
+    </div>
+  </div>
+</section>
+
+<section class="limits">
+  <h2>Limitations</h2>
+  <p>
+    All data is synthetic and single-page, from a small number of templates; 100 documents per evaluation set; single
+    runs. Name groups are a crude proxy for audit-style testing, not demographics. A production system would need
+    real, consented data and legal and domain review of the fairness criteria.
+  </p>
+</section>

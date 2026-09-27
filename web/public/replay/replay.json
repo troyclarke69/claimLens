@@ -1,0 +1,5678 @@
+{
+ "models": {
+  "baseline": "Baseline (prompt only)",
+  "sft_v2": "SFT v2",
+  "grpo": "GRPO"
+ },
+ "production": "sft_v2ctrl",
+ "metrics": {
+  "baseline": {
+   "test": {
+    "run_id": "baseline_v2_greedy_test",
+    "evaluator_version": "1.1",
+    "field_accuracy": 0.93,
+    "grounded_accuracy": 0.3759,
+    "hallucination_rate": 0.0714,
+    "miss_rate": 0.0034,
+    "doc_exact_match": 0.64,
+    "mean_reward": 0.8046,
+    "latency_ms_p50": 30467.1
+   },
+   "holdout": {
+    "run_id": "baseline_v2_greedy_holdout",
+    "evaluator_version": "1.1",
+    "field_accuracy": 0.9014,
+    "grounded_accuracy": 0.3819,
+    "hallucination_rate": 0.0874,
+    "miss_rate": 0.0369,
+    "doc_exact_match": 0.53,
+    "mean_reward": 0.7738,
+    "latency_ms_p50": 23515.0
+   },
+   "fairness": {
+    "run_id": "baseline_v2_greedy_fairness",
+    "evaluator_version": "1.1",
+    "field_accuracy": 0.9343,
+    "grounded_accuracy": 0.3292,
+    "hallucination_rate": 0.1212,
+    "miss_rate": 0.0,
+    "doc_exact_match": 0.58,
+    "mean_reward": 0.8025,
+    "latency_ms_p50": 29639.3,
+    "counterfactual_consistency": 0.92
+   }
+  },
+  "grpo_v1": {
+   "test": {
+    "run_id": "grpo_v1_v2_greedy_test",
+    "evaluator_version": "1.1",
+    "field_accuracy": 0.9714,
+    "grounded_accuracy": 0.9592,
+    "hallucination_rate": 0.0,
+    "miss_rate": 0.0,
+    "doc_exact_match": 0.85,
+    "mean_reward": 0.9704,
+    "latency_ms_p50": 23922.7
+   },
+   "holdout": {
+    "run_id": "grpo_v1_v2_greedy_holdout",
+    "evaluator_version": "1.1",
+    "field_accuracy": 0.8986,
+    "grounded_accuracy": 0.8291,
+    "hallucination_rate": 0.0194,
+    "miss_rate": 0.067,
+    "doc_exact_match": 0.45,
+    "mean_reward": 0.8877,
+    "latency_ms_p50": 22927.6
+   },
+   "fairness": null
+  },
+  "sft_v1": {
+   "test": {
+    "run_id": "sft_v1_v2_greedy_test",
+    "evaluator_version": "1.1",
+    "field_accuracy": 0.97,
+    "grounded_accuracy": 0.9609,
+    "hallucination_rate": 0.0,
+    "miss_rate": 0.0,
+    "doc_exact_match": 0.84,
+    "mean_reward": 0.9701,
+    "latency_ms_p50": 24358.2
+   },
+   "holdout": {
+    "run_id": "sft_v1_v2_greedy_holdout",
+    "evaluator_version": "1.1",
+    "field_accuracy": 0.8986,
+    "grounded_accuracy": 0.8442,
+    "hallucination_rate": 0.0485,
+    "miss_rate": 0.0519,
+    "doc_exact_match": 0.49,
+    "mean_reward": 0.8918,
+    "latency_ms_p50": 22899.2
+   },
+   "fairness": {
+    "run_id": "sft_v1_v2_greedy_fairness",
+    "evaluator_version": "1.1",
+    "field_accuracy": 0.9743,
+    "grounded_accuracy": 0.9683,
+    "hallucination_rate": 0.0,
+    "miss_rate": 0.0,
+    "doc_exact_match": 0.84,
+    "mean_reward": 0.9753,
+    "latency_ms_p50": 24329.0,
+    "counterfactual_consistency": 1.0
+   }
+  },
+  "sft_v2ctrl": {
+   "test": {
+    "run_id": "sft_v2ctrl_v2_greedy_test",
+    "evaluator_version": "1.1",
+    "field_accuracy": 0.9743,
+    "grounded_accuracy": 0.9609,
+    "hallucination_rate": 0.0,
+    "miss_rate": 0.0,
+    "doc_exact_match": 0.87,
+    "mean_reward": 0.974,
+    "latency_ms_p50": 23126.9
+   },
+   "holdout": {
+    "run_id": "sft_v2ctrl_v2_greedy_holdout",
+    "evaluator_version": "1.1",
+    "field_accuracy": 0.9286,
+    "grounded_accuracy": 0.8643,
+    "hallucination_rate": 0.0291,
+    "miss_rate": 0.0385,
+    "doc_exact_match": 0.63,
+    "mean_reward": 0.9167,
+    "latency_ms_p50": 22493.7
+   },
+   "fairness": null
+  }
+ },
+ "docs": [
+  {
+   "doc_id": "test-00041",
+   "split": "test",
+   "doc_type": "invoice",
+   "note": "Invoice with no claim number. The baseline copies the invoice number into it; SFT answers null. No review flag fires, because the copied value really is on the page.",
+   "image": "replay/images/test-00041.jpg",
+   "width": 980,
+   "height": 1260,
+   "gold": {
+    "claim_number": null,
+    "policy_number": null,
+    "claimant_name": {
+     "value": "Chiamaka Mensah",
+     "evidence_text": "Chiamaka Mensah",
+     "page": 1,
+     "bbox": [
+      59.8,
+      205.1,
+      217.8,
+      219.2
+     ]
+    },
+    "date_of_loss": {
+     "value": "2024-05-26",
+     "evidence_text": "05/26/2024",
+     "page": 1,
+     "bbox": [
+      709.8,
+      233.8,
+      789.8,
+      245.9
+     ]
+    },
+    "provider_name": {
+     "value": "Crestview Medical Centre",
+     "evidence_text": "Crestview Medical Centre",
+     "page": 1,
+     "bbox": [
+      59.7,
+      56.0,
+      398.7,
+      76.2
+     ]
+    },
+    "incident_type": null,
+    "total_amount": {
+     "value": "384.30",
+     "evidence_text": "$384.30",
+     "page": 1,
+     "bbox": [
+      800.0,
+      547.8,
+      869.0,
+      562.8
+     ]
+    }
+   },
+   "predictions": {
+    "baseline": {
+     "response": {
+      "request_id": "baseline_v2_greedy_test/test-00041",
+      "fields": {
+       "claim_number": {
+        "value": "INV-89996",
+        "evidence_text": "INV-89996",
+        "page": 1,
+        "bbox": [
+         590.0,
+         178.0,
+         671.0,
+         192.0
+        ]
+       },
+       "policy_number": null,
+       "claimant_name": {
+        "value": "Chiamaka Mensah",
+        "evidence_text": "Chiamaka Mensah",
+        "page": 1,
+        "bbox": [
+         60.0,
+         203.0,
+         217.0,
+         224.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2024-05-26",
+        "evidence_text": "05/26/2024",
+        "page": 1,
+        "bbox": [
+         595.0,
+         231.0,
+         675.0,
+         247.0
+        ]
+       },
+       "provider_name": {
+        "value": "Crestview Medical Centre",
+        "evidence_text": "Crestview Medical Centre",
+        "page": 1,
+        "bbox": [
+         60.0,
+         54.0,
+         397.0,
+         81.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "384.30",
+        "evidence_text": "$384.30",
+        "page": 1,
+        "bbox": [
+         800.0,
+         547.0,
+         867.0,
+         565.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "Baseline (prompt only)",
+      "latency_ms": 25213.3,
+      "audit": {
+       "record_hash": "1314e3a9d045c9f14dbd3d135cdd5710ac43df86fa2472cc34d773356fff5071",
+       "prev_hash": "7e2a0af167f40ef941f463f6eb997222bae5ce5d22268ef70223563e5abf629f"
+      }
+     },
+     "raw_output": "```json\n{\n  \"claim_number\": {\"value\": \"INV-89996\", \"evidence_text\": \"INV-89996\", \"page\": 1, \"bbox\": [590, 178, 671, 192]},\n  \"policy_number\": null,\n  \"claimant_name\": {\"value\": \"Chiamaka Mensah\", \"evidence_text\": \"Chiamaka Mensah\", \"page\": 1, \"bbox\": [60, 203, 217, 224]},\n  \"date_of_loss\": {\"value\": \"2024-05-26\", \"evidence_text\": \"05/26/2024\", \"page\": 1, \"bbox\": [595, 231, 675, 247]},\n  \"provider_name\": {\"value\": \"Crestview Medical Centre\", \"evidence_text\": \"Crestview Medical Centre\", \"page\": 1, \"bbox\": [60, 54, 397, 81]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"384.30\", \"evidence_text\": \"$384.30\", \"page\": 1, \"bbox\": [800, 547, 867, 565]}\n}\n```",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+     "scores": {
+      "field_accuracy": 0.8571,
+      "grounded_accuracy": 0.75,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "distractor_for_absent",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.669
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.745
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.813
+       }
+      }
+     }
+    },
+    "sft_v2": {
+     "response": {
+      "request_id": "sft_v2ctrl_v2_greedy_test/test-00041",
+      "fields": {
+       "claim_number": null,
+       "policy_number": null,
+       "claimant_name": {
+        "value": "Chiamaka Mensah",
+        "evidence_text": "Chiamaka Mensah",
+        "page": 1,
+        "bbox": [
+         60.0,
+         205.0,
+         219.0,
+         222.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2024-05-26",
+        "evidence_text": "05/26/2024",
+        "page": 1,
+        "bbox": [
+         710.0,
+         234.0,
+         790.0,
+         247.0
+        ]
+       },
+       "provider_name": {
+        "value": "Crestview Medical Centre",
+        "evidence_text": "Crestview Medical Centre",
+        "page": 1,
+        "bbox": [
+         60.0,
+         56.0,
+         400.0,
+         82.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "384.30",
+        "evidence_text": "$384.30",
+        "page": 1,
+        "bbox": [
+         800.0,
+         549.0,
+         868.0,
+         564.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "SFT v2",
+      "latency_ms": 16487.6,
+      "audit": {
+       "record_hash": "d18dd0b636c88aa47912bf9844c65468a3aca2f51357222cbe5a155527abaee6",
+       "prev_hash": "b9c5f5fa085bf9f1681c707e6854b34c167c05049f4fcf63e3dbde297a16ec21"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": null,\n  \"policy_number\": null,\n  \"claimant_name\": {\"value\": \"Chiamaka Mensah\", \"evidence_text\": \"Chiamaka Mensah\", \"page\": 1, \"bbox\": [60, 205, 219, 222]},\n  \"date_of_loss\": {\"value\": \"2024-05-26\", \"evidence_text\": \"05/26/2024\", \"page\": 1, \"bbox\": [710, 234, 790, 247]},\n  \"provider_name\": {\"value\": \"Crestview Medical Centre\", \"evidence_text\": \"Crestview Medical Centre\", \"page\": 1, \"bbox\": [60, 56, 400, 82]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"384.30\", \"evidence_text\": \"$384.30\", \"page\": 1, \"bbox\": [800, 549, 868, 564]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+sft_v2ctrl@502bdd24f7921290",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 1.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.822
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.897
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.773
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.84
+       }
+      }
+     }
+    },
+    "grpo": {
+     "response": {
+      "request_id": "grpo_v1_v2_greedy_test/test-00041",
+      "fields": {
+       "claim_number": null,
+       "policy_number": null,
+       "claimant_name": {
+        "value": "Chiamaka Mensah",
+        "evidence_text": "Chiamaka Mensah",
+        "page": 1,
+        "bbox": [
+         60.0,
+         205.0,
+         219.0,
+         222.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2024-05-26",
+        "evidence_text": "05/26/2024",
+        "page": 1,
+        "bbox": [
+         710.0,
+         234.0,
+         790.0,
+         247.0
+        ]
+       },
+       "provider_name": {
+        "value": "Crestview Medical Centre",
+        "evidence_text": "Crestview Medical Centre",
+        "page": 1,
+        "bbox": [
+         60.0,
+         56.0,
+         400.0,
+         82.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "384.30",
+        "evidence_text": "$384.30",
+        "page": 1,
+        "bbox": [
+         800.0,
+         549.0,
+         868.0,
+         563.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "GRPO",
+      "latency_ms": 17145.5,
+      "audit": {
+       "record_hash": "210a73d0f8fb02c08005a608871f5d2429bca06a121bd6090bedc64fc0ba8893",
+       "prev_hash": "8efbab4302d47639bc931b0bc3dfa5cc3d6abf8a73ac0901d29b21b39e50de61"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": null,\n  \"policy_number\": null,\n  \"claimant_name\": {\"value\": \"Chiamaka Mensah\", \"evidence_text\": \"Chiamaka Mensah\", \"page\": 1, \"bbox\": [60, 205, 219, 222]},\n  \"date_of_loss\": {\"value\": \"2024-05-26\", \"evidence_text\": \"05/26/2024\", \"page\": 1, \"bbox\": [710, 234, 790, 247]},\n  \"provider_name\": {\"value\": \"Crestview Medical Centre\", \"evidence_text\": \"Crestview Medical Centre\", \"page\": 1, \"bbox\": [60, 56, 400, 82]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"384.30\", \"evidence_text\": \"$384.30\", \"page\": 1, \"bbox\": [800, 549, 868, 563]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+grpo_v1@7c67a0ea535bac43",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 1.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.822
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.897
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.773
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.895
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "doc_id": "test-00011",
+   "split": "test",
+   "doc_type": "invoice",
+   "note": "Baseline invents a claim number that is not on the page; SFT does not.",
+   "image": "replay/images/test-00011.jpg",
+   "width": 980,
+   "height": 1260,
+   "gold": {
+    "claim_number": null,
+    "policy_number": null,
+    "claimant_name": {
+     "value": "Sarah Johnson",
+     "evidence_text": "Sarah Johnson",
+     "page": 1,
+     "bbox": [
+      63.0,
+      201.9,
+      191.1,
+      216.8
+     ]
+    },
+    "date_of_loss": {
+     "value": "2025-10-31",
+     "evidence_text": "31 Oct 2025",
+     "page": 1,
+     "bbox": [
+      712.8,
+      236.6,
+      799.9,
+      248.3
+     ]
+    },
+    "provider_name": {
+     "value": "Allied Home Repair",
+     "evidence_text": "Allied Home Repair",
+     "page": 1,
+     "bbox": [
+      64.0,
+      52.9,
+      321.2,
+      80.7
+     ]
+    },
+    "incident_type": null,
+    "total_amount": {
+     "value": "4713.31",
+     "evidence_text": "$4713.31",
+     "page": 1,
+     "bbox": [
+      799.7,
+      652.3,
+      879.8,
+      667.9
+     ]
+    }
+   },
+   "predictions": {
+    "baseline": {
+     "response": {
+      "request_id": "baseline_v2_greedy_test/test-00011",
+      "fields": {
+       "claim_number": {
+        "value": "70858",
+        "evidence_text": "No. 70858",
+        "page": 1,
+        "bbox": [
+         690.0,
+         175.0,
+         785.0,
+         197.0
+        ]
+       },
+       "policy_number": null,
+       "claimant_name": {
+        "value": "Sarah Johnson",
+        "evidence_text": "Sarah Johnson",
+        "page": 1,
+        "bbox": [
+         248.0,
+         199.0,
+         356.0,
+         221.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-10-31",
+        "evidence_text": "31 Oct 2025",
+        "page": 1,
+        "bbox": [
+         690.0,
+         230.0,
+         798.0,
+         252.0
+        ]
+       },
+       "provider_name": {
+        "value": "Allied Home Repair",
+        "evidence_text": "Allied Home Repair",
+        "page": 1,
+        "bbox": [
+         64.0,
+         52.0,
+         318.0,
+         76.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "4713.31",
+        "evidence_text": "$4713.31",
+        "page": 1,
+        "bbox": [
+         690.0,
+         646.0,
+         890.0,
+         668.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": true,
+       "reasons": [
+        "claim_number: value does not match its own evidence text"
+       ]
+      },
+      "model": "Baseline (prompt only)",
+      "latency_ms": 24718.8,
+      "audit": {
+       "record_hash": "688256ecb2ba13da68f684bd64b2b9a474bae9d15ac4e53e45cd35c195624fff",
+       "prev_hash": "7382799bee6211f6286b5da1df1999bd5144558a0b6574e0817f4931c4bcb350"
+      }
+     },
+     "raw_output": "```json\n{\n  \"claim_number\": {\"value\": \"70858\", \"evidence_text\": \"No. 70858\", \"page\": 1, \"bbox\": [690, 175, 785, 197]},\n  \"policy_number\": null,\n  \"claimant_name\": {\"value\": \"Sarah Johnson\", \"evidence_text\": \"Sarah Johnson\", \"page\": 1, \"bbox\": [248, 199, 356, 221]},\n  \"date_of_loss\": {\"value\": \"2025-10-31\", \"evidence_text\": \"31 Oct 2025\", \"page\": 1, \"bbox\": [690, 230, 798, 252]},\n  \"provider_name\": {\"value\": \"Allied Home Repair\", \"evidence_text\": \"Allied Home Repair\", \"page\": 1, \"bbox\": [64, 52, 318, 76]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"4713.31\", \"evidence_text\": \"$4713.31\", \"page\": 1, \"bbox\": [690, 646, 890, 668]}\n\n}\n```",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+     "scores": {
+      "field_accuracy": 0.8571,
+      "grounded_accuracy": 0.25,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "hallucinated",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.416
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.795
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.284
+       }
+      }
+     }
+    },
+    "sft_v2": {
+     "response": {
+      "request_id": "sft_v2ctrl_v2_greedy_test/test-00011",
+      "fields": {
+       "claim_number": null,
+       "policy_number": null,
+       "claimant_name": {
+        "value": "Sarah Johnson",
+        "evidence_text": "Sarah Johnson",
+        "page": 1,
+        "bbox": [
+         64.0,
+         203.0,
+         191.0,
+         220.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-10-31",
+        "evidence_text": "31 Oct 2025",
+        "page": 1,
+        "bbox": [
+         712.0,
+         236.0,
+         802.0,
+         250.0
+        ]
+       },
+       "provider_name": {
+        "value": "Allied Home Repair",
+        "evidence_text": "Allied Home Repair",
+        "page": 1,
+        "bbox": [
+         64.0,
+         54.0,
+         322.0,
+         82.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "4713.31",
+        "evidence_text": "$4713.31",
+        "page": 1,
+        "bbox": [
+         800.0,
+         652.0,
+         879.0,
+         672.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "SFT v2",
+      "latency_ms": 16009.7,
+      "audit": {
+       "record_hash": "447deb1d8ffef7e21715166592e76cc172fc7eb74f3c5f64235acf3613680a64",
+       "prev_hash": "f324f55b0403c85315e6889178a17100100b6dcbaff20a856a120ad9273c2bbc"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": null,\n  \"policy_number\": null,\n  \"claimant_name\": {\"value\": \"Sarah Johnson\", \"evidence_text\": \"Sarah Johnson\", \"page\": 1, \"bbox\": [64, 203, 191, 220]},\n  \"date_of_loss\": {\"value\": \"2025-10-31\", \"evidence_text\": \"31 Oct 2025\", \"page\": 1, \"bbox\": [712, 236, 802, 250]},\n  \"provider_name\": {\"value\": \"Allied Home Repair\", \"evidence_text\": \"Allied Home Repair\", \"page\": 1, \"bbox\": [64, 54, 322, 82]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"4713.31\", \"evidence_text\": \"$4713.31\", \"page\": 1, \"bbox\": [800, 652, 879, 672]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+sft_v2ctrl@502bdd24f7921290",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 1.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.757
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.809
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.915
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.772
+       }
+      }
+     }
+    },
+    "grpo": {
+     "response": {
+      "request_id": "grpo_v1_v2_greedy_test/test-00011",
+      "fields": {
+       "claim_number": null,
+       "policy_number": null,
+       "claimant_name": {
+        "value": "Sarah Johnson",
+        "evidence_text": "Sarah Johnson",
+        "page": 1,
+        "bbox": [
+         63.0,
+         202.0,
+         190.0,
+         220.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-10-31",
+        "evidence_text": "31 Oct 2025",
+        "page": 1,
+        "bbox": [
+         712.0,
+         236.0,
+         802.0,
+         252.0
+        ]
+       },
+       "provider_name": {
+        "value": "Allied Home Repair",
+        "evidence_text": "Allied Home Repair",
+        "page": 1,
+        "bbox": [
+         65.0,
+         53.0,
+         322.0,
+         81.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "4713.31",
+        "evidence_text": "$4713.31",
+        "page": 1,
+        "bbox": [
+         800.0,
+         651.0,
+         880.0,
+         671.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "GRPO",
+      "latency_ms": 16732.3,
+      "audit": {
+       "record_hash": "317e2459d68ad99a9624224114f6673e071449da2e71a8c52b0cfc0601296ac5",
+       "prev_hash": "1dc21a3073fe5f3a8c09c0910288c29a0a48f2bad5c72ab79ded7413d382e4ee"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": null,\n  \"policy_number\": null,\n  \"claimant_name\": {\"value\": \"Sarah Johnson\", \"evidence_text\": \"Sarah Johnson\", \"page\": 1, \"bbox\": [63, 202, 190, 220]},\n  \"date_of_loss\": {\"value\": \"2025-10-31\", \"evidence_text\": \"31 Oct 2025\", \"page\": 1, \"bbox\": [712, 236, 802, 252]},\n  \"provider_name\": {\"value\": \"Allied Home Repair\", \"evidence_text\": \"Allied Home Repair\", \"page\": 1, \"bbox\": [65, 53, 322, 81]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"4713.31\", \"evidence_text\": \"$4713.31\", \"page\": 1, \"bbox\": [800, 651, 880, 671]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+grpo_v1@7c67a0ea535bac43",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 1.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.812
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.708
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.979
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.776
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "doc_id": "test-00000",
+   "split": "test",
+   "doc_type": "claim_form",
+   "note": "Right values, wrong boxes: the baseline reads every field but its citations miss; after SFT every box lands.",
+   "image": "replay/images/test-00000.jpg",
+   "width": 980,
+   "height": 1260,
+   "gold": {
+    "claim_number": {
+     "value": "CLM-2025-254707",
+     "evidence_text": "CLM-2025-254707",
+     "page": 1,
+     "bbox": [
+      233.2,
+      431.0,
+      383.3,
+      444.4
+     ]
+    },
+    "policy_number": {
+     "value": "POL-357-9453-C",
+     "evidence_text": "POL-357-9453-C",
+     "page": 1,
+     "bbox": [
+      231.5,
+      253.1,
+      368.6,
+      266.4
+     ]
+    },
+    "claimant_name": {
+     "value": "Fatima Khalil",
+     "evidence_text": "Fatima Khalil",
+     "page": 1,
+     "bbox": [
+      244.1,
+      206.2,
+      354.2,
+      221.3
+     ]
+    },
+    "date_of_loss": {
+     "value": "2025-01-07",
+     "evidence_text": "2025-01-07",
+     "page": 1,
+     "bbox": [
+      233.6,
+      477.5,
+      325.7,
+      490.4
+     ]
+    },
+    "provider_name": null,
+    "incident_type": {
+     "value": "Vehicle theft",
+     "evidence_text": "Vehicle theft",
+     "page": 1,
+     "bbox": [
+      658.6,
+      472.5,
+      756.7,
+      486.4
+     ]
+    },
+    "total_amount": {
+     "value": "2972.80",
+     "evidence_text": "CAD 2,972.80",
+     "page": 1,
+     "bbox": [
+      661.5,
+      785.4,
+      774.6,
+      800.4
+     ]
+    }
+   },
+   "predictions": {
+    "baseline": {
+     "response": {
+      "request_id": "baseline_v2_greedy_test/test-00000",
+      "fields": {
+       "claim_number": {
+        "value": "CLM-2025-254707",
+        "evidence_text": "CLM-2025-254707",
+        "page": 1,
+        "bbox": [
+         231.0,
+         314.0,
+         381.0,
+         336.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-357-9453-C",
+        "evidence_text": "POL-357-9453-C",
+        "page": 1,
+        "bbox": [
+         231.0,
+         138.0,
+         367.0,
+         159.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Fatima Khalil",
+        "evidence_text": "Fatima Khalil",
+        "page": 1,
+        "bbox": [
+         244.0,
+         188.0,
+         352.0,
+         209.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-01-07",
+        "evidence_text": "2025-01-07",
+        "page": 1,
+        "bbox": [
+         231.0,
+         402.0,
+         323.0,
+         424.0
+        ]
+       },
+       "provider_name": null,
+       "incident_type": {
+        "value": "Vehicle theft",
+        "evidence_text": "Vehicle theft",
+        "page": 1,
+        "bbox": [
+         658.0,
+         402.0,
+         755.0,
+         424.0
+        ]
+       },
+       "total_amount": {
+        "value": "2,972.80",
+        "evidence_text": "CAD 2,972.80",
+        "page": 1,
+        "bbox": [
+         660.0,
+         668.0,
+         773.0,
+         690.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "Baseline (prompt only)",
+      "latency_ms": 33681.6,
+      "audit": {
+       "record_hash": "f82f8795134e1d9ffce62ef1d814958292f0f8592f6ff350e084a21609678924",
+       "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+     },
+     "raw_output": "```json\n{\n  \"claim_number\": {\"value\": \"CLM-2025-254707\", \"evidence_text\": \"CLM-2025-254707\", \"page\": 1, \"bbox\": [231, 314, 381, 336]},\n  \"policy_number\": {\"value\": \"POL-357-9453-C\", \"evidence_text\": \"POL-357-9453-C\", \"page\": 1, \"bbox\": [231, 138, 367, 159]},\n  \"claimant_name\": {\"value\": \"Fatima Khalil\", \"evidence_text\": \"Fatima Khalil\", \"page\": 1, \"bbox\": [244, 188, 352, 209]},\n  \"date_of_loss\": {\"value\": \"2025-01-07\", \"evidence_text\": \"2025-01-07\", \"page\": 1, \"bbox\": [231, 402, 323, 424]},\n  \"provider_name\": null,\n  \"incident_type\": {\"value\": \"Vehicle theft\", \"evidence_text\": \"Vehicle theft\", \"page\": 1, \"bbox\": [658, 402, 755, 424]},\n  \"total_amount\": {\"value\": \"2,972.80\", \"evidence_text\": \"CAD 2,972.80\", \"page\": 1, \"bbox\": [660, 668, 773, 690]}\n}\n```",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 0.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.083
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       }
+      }
+     }
+    },
+    "sft_v2": {
+     "response": {
+      "request_id": "sft_v2ctrl_v2_greedy_test/test-00000",
+      "fields": {
+       "claim_number": {
+        "value": "CLM-2025-254707",
+        "evidence_text": "CLM-2025-254707",
+        "page": 1,
+        "bbox": [
+         233.0,
+         431.0,
+         383.0,
+         444.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-357-9453-C",
+        "evidence_text": "POL-357-9453-C",
+        "page": 1,
+        "bbox": [
+         231.0,
+         253.0,
+         369.0,
+         266.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Fatima Khalil",
+        "evidence_text": "Fatima Khalil",
+        "page": 1,
+        "bbox": [
+         244.0,
+         207.0,
+         355.0,
+         222.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-01-07",
+        "evidence_text": "2025-01-07",
+        "page": 1,
+        "bbox": [
+         233.0,
+         478.0,
+         326.0,
+         491.0
+        ]
+       },
+       "provider_name": null,
+       "incident_type": {
+        "value": "Vehicle theft",
+        "evidence_text": "Vehicle theft",
+        "page": 1,
+        "bbox": [
+         659.0,
+         473.0,
+         757.0,
+         488.0
+        ]
+       },
+       "total_amount": {
+        "value": "2972.80",
+        "evidence_text": "CAD 2,972.80",
+        "page": 1,
+        "bbox": [
+         661.0,
+         786.0,
+         775.0,
+         800.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "SFT v2",
+      "latency_ms": 23824.1,
+      "audit": {
+       "record_hash": "c25dfe5af538428a9db7399686146c3680bcdf80397cdf9891332ba4a97003b3",
+       "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"CLM-2025-254707\", \"evidence_text\": \"CLM-2025-254707\", \"page\": 1, \"bbox\": [233, 431, 383, 444]},\n  \"policy_number\": {\"value\": \"POL-357-9453-C\", \"evidence_text\": \"POL-357-9453-C\", \"page\": 1, \"bbox\": [231, 253, 369, 266]},\n  \"claimant_name\": {\"value\": \"Fatima Khalil\", \"evidence_text\": \"Fatima Khalil\", \"page\": 1, \"bbox\": [244, 207, 355, 222]},\n  \"date_of_loss\": {\"value\": \"2025-01-07\", \"evidence_text\": \"2025-01-07\", \"page\": 1, \"bbox\": [233, 478, 326, 491]},\n  \"provider_name\": null,\n  \"incident_type\": {\"value\": \"Vehicle theft\", \"evidence_text\": \"Vehicle theft\", \"page\": 1, \"bbox\": [659, 473, 757, 488]},\n  \"total_amount\": {\"value\": \"2972.80\", \"evidence_text\": \"CAD 2,972.80\", \"page\": 1, \"bbox\": [661, 786, 775, 800]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+sft_v2ctrl@502bdd24f7921290",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 1.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.967
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.957
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.898
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.91
+       },
+       "provider_name": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.859
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.926
+       }
+      }
+     }
+    },
+    "grpo": {
+     "response": {
+      "request_id": "grpo_v1_v2_greedy_test/test-00000",
+      "fields": {
+       "claim_number": {
+        "value": "CLM-2025-254707",
+        "evidence_text": "CLM-2025-254707",
+        "page": 1,
+        "bbox": [
+         233.0,
+         431.0,
+         383.0,
+         444.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-357-9453-C",
+        "evidence_text": "POL-357-9453-C",
+        "page": 1,
+        "bbox": [
+         231.0,
+         253.0,
+         369.0,
+         266.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Fatima Khalil",
+        "evidence_text": "Fatima Khalil",
+        "page": 1,
+        "bbox": [
+         244.0,
+         207.0,
+         355.0,
+         222.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-01-07",
+        "evidence_text": "2025-01-07",
+        "page": 1,
+        "bbox": [
+         233.0,
+         477.0,
+         326.0,
+         492.0
+        ]
+       },
+       "provider_name": null,
+       "incident_type": {
+        "value": "Vehicle theft",
+        "evidence_text": "Vehicle theft",
+        "page": 1,
+        "bbox": [
+         659.0,
+         472.0,
+         757.0,
+         489.0
+        ]
+       },
+       "total_amount": {
+        "value": "2972.80",
+        "evidence_text": "CAD 2,972.80",
+        "page": 1,
+        "bbox": [
+         661.0,
+         785.0,
+         774.0,
+         800.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "GRPO",
+      "latency_ms": 24603.3,
+      "audit": {
+       "record_hash": "f3f80e74f2eb0effa63d658fddb330e0e87e3f4639368b1b05f285e960176e2b",
+       "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"CLM-2025-254707\", \"evidence_text\": \"CLM-2025-254707\", \"page\": 1, \"bbox\": [233, 431, 383, 444]},\n  \"policy_number\": {\"value\": \"POL-357-9453-C\", \"evidence_text\": \"POL-357-9453-C\", \"page\": 1, \"bbox\": [231, 253, 369, 266]},\n  \"claimant_name\": {\"value\": \"Fatima Khalil\", \"evidence_text\": \"Fatima Khalil\", \"page\": 1, \"bbox\": [244, 207, 355, 222]},\n  \"date_of_loss\": {\"value\": \"2025-01-07\", \"evidence_text\": \"2025-01-07\", \"page\": 1, \"bbox\": [233, 477, 326, 492]},\n  \"provider_name\": null,\n  \"incident_type\": {\"value\": \"Vehicle theft\", \"evidence_text\": \"Vehicle theft\", \"page\": 1, \"bbox\": [659, 472, 757, 489]},\n  \"total_amount\": {\"value\": \"2972.80\", \"evidence_text\": \"CAD 2,972.80\", \"page\": 1, \"bbox\": [661, 785, 774, 800]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+grpo_v1@7c67a0ea535bac43",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 1.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.967
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.957
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.898
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.852
+       },
+       "provider_name": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.812
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.939
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "doc_id": "test-00005",
+   "split": "test",
+   "doc_type": "invoice",
+   "note": "Hard scan: a name and a long ID are misread by one character in every model (the vision encoder was frozen). The fine-tuned models' date slip is caught by the evidence-mismatch flag.",
+   "image": "replay/images/test-00005.jpg",
+   "width": 980,
+   "height": 1260,
+   "gold": {
+    "claim_number": {
+     "value": "CLM-2025-846674",
+     "evidence_text": "CLM-2025-846674",
+     "page": 1,
+     "bbox": [
+      723.6,
+      271.8,
+      857.9,
+      287.9
+     ]
+    },
+    "policy_number": null,
+    "claimant_name": {
+     "value": "Guadalupe Rodr\u00edguez",
+     "evidence_text": "Guadalupe Rodr\u00edguez",
+     "page": 1,
+     "bbox": [
+      76.0,
+      188.7,
+      262.6,
+      213.9
+     ]
+    },
+    "date_of_loss": {
+     "value": "2025-07-07",
+     "evidence_text": "07 Jul 2025",
+     "page": 1,
+     "bbox": [
+      724.6,
+      242.8,
+      808.0,
+      258.0
+     ]
+    },
+    "provider_name": {
+     "value": "Kingsway Auto Glass",
+     "evidence_text": "Kingsway Auto Glass",
+     "page": 1,
+     "bbox": [
+      81.5,
+      39.8,
+      367.2,
+      76.8
+     ]
+    },
+    "incident_type": null,
+    "total_amount": {
+     "value": "1459.46",
+     "evidence_text": "$1,459.46",
+     "page": 1,
+     "bbox": [
+      799.7,
+      628.0,
+      885.2,
+      648.2
+     ]
+    }
+   },
+   "predictions": {
+    "baseline": {
+     "response": {
+      "request_id": "baseline_v2_greedy_test/test-00005",
+      "fields": {
+       "claim_number": {
+        "value": "CLM-2025-846874",
+        "evidence_text": "CLM-2025-846874",
+        "page": 1,
+        "bbox": [
+         630.0,
+         164.0,
+         718.0,
+         186.0
+        ]
+       },
+       "policy_number": null,
+       "claimant_name": {
+        "value": "Cuadalope Rodriguez",
+        "evidence_text": "Cuadalope Rodriguez",
+        "page": 1,
+        "bbox": [
+         138.0,
+         188.0,
+         248.0,
+         210.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-07-07",
+        "evidence_text": "07 Jul 2025",
+        "page": 1,
+        "bbox": [
+         630.0,
+         188.0,
+         718.0,
+         210.0
+        ]
+       },
+       "provider_name": {
+        "value": "Kingsway Auto Glass",
+        "evidence_text": "Kingsway Auto Glass",
+        "page": 1,
+        "bbox": [
+         138.0,
+         38.0,
+         296.0,
+         69.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "1,459.46",
+        "evidence_text": "$1,459.46",
+        "page": 1,
+        "bbox": [
+         630.0,
+         610.0,
+         890.0,
+         632.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "Baseline (prompt only)",
+      "latency_ms": 26186.9,
+      "audit": {
+       "record_hash": "0f11eba27138007c923b056fd8c9a5df1dd255644fe59b14b1551c207d67140d",
+       "prev_hash": "6da8985f73c06ba7f6c7f37706f5a65a553969c481d75a24787ff024b0b0c379"
+      }
+     },
+     "raw_output": "```json\n{\n  \"claim_number\": {\"value\": \"CLM-2025-846874\", \"evidence_text\": \"CLM-2025-846874\", \"page\": 1, \"bbox\": [630, 164, 718, 186]},\n  \"policy_number\": null,\n  \"claimant_name\": {\"value\": \"Cuadalope Rodriguez\", \"evidence_text\": \"Cuadalope Rodriguez\", \"page\": 1, \"bbox\": [138, 188, 248, 210]},\n  \"date_of_loss\": {\"value\": \"2025-07-07\", \"evidence_text\": \"07 Jul 2025\", \"page\": 1, \"bbox\": [630, 188, 718, 210]},\n  \"provider_name\": {\"value\": \"Kingsway Auto Glass\", \"evidence_text\": \"Kingsway Auto Glass\", \"page\": 1, \"bbox\": [138, 38, 296, 69]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"1,459.46\", \"evidence_text\": \"$1,459.46\", \"page\": 1, \"bbox\": [630, 610, 890, 632]}\n}\n```",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+     "scores": {
+      "field_accuracy": 0.7143,
+      "grounded_accuracy": 0.0,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "near_miss",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "near_miss",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.49
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.425
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.048
+       }
+      }
+     }
+    },
+    "sft_v2": {
+     "response": {
+      "request_id": "sft_v2ctrl_v2_greedy_test/test-00005",
+      "fields": {
+       "claim_number": {
+        "value": "CLM-2025-846874",
+        "evidence_text": "CLM-2025-846874",
+        "page": 1,
+        "bbox": [
+         724.0,
+         274.0,
+         856.0,
+         286.0
+        ]
+       },
+       "policy_number": null,
+       "claimant_name": {
+        "value": "Cuadalope Rodriguez",
+        "evidence_text": "Cuadalope Rodriguez",
+        "page": 1,
+        "bbox": [
+         76.0,
+         194.0,
+         236.0,
+         212.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-07-01",
+        "evidence_text": "07 Jul 2025",
+        "page": 1,
+        "bbox": [
+         724.0,
+         242.0,
+         822.0,
+         254.0
+        ]
+       },
+       "provider_name": {
+        "value": "Kingsway Auto Glass",
+        "evidence_text": "Kingsway Auto Glass",
+        "page": 1,
+        "bbox": [
+         81.0,
+         40.0,
+         340.0,
+         72.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "1459.46",
+        "evidence_text": "$1,459.46",
+        "page": 1,
+        "bbox": [
+         800.0,
+         628.0,
+         882.0,
+         644.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": true,
+       "reasons": [
+        "date_of_loss: value does not match its own evidence text"
+       ]
+      },
+      "model": "SFT v2",
+      "latency_ms": 20298.6,
+      "audit": {
+       "record_hash": "dc1b3db147d973c19ba367875774dfd9a22b085c6682163033ff7fb070db3a6c",
+       "prev_hash": "dfb20058b0b4ef99b63eece31610bf93be470de9abb146c36d150678071923b4"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"CLM-2025-846874\", \"evidence_text\": \"CLM-2025-846874\", \"page\": 1, \"bbox\": [724, 274, 856, 286]},\n  \"policy_number\": null,\n  \"claimant_name\": {\"value\": \"Cuadalope Rodriguez\", \"evidence_text\": \"Cuadalope Rodriguez\", \"page\": 1, \"bbox\": [76, 194, 236, 212]},\n  \"date_of_loss\": {\"value\": \"2025-07-01\", \"evidence_text\": \"07 Jul 2025\", \"page\": 1, \"bbox\": [724, 242, 822, 254]},\n  \"provider_name\": {\"value\": \"Kingsway Auto Glass\", \"evidence_text\": \"Kingsway Auto Glass\", \"page\": 1, \"bbox\": [81, 40, 340, 72]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"1459.46\", \"evidence_text\": \"$1,459.46\", \"page\": 1, \"bbox\": [800, 628, 882, 644]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+sft_v2ctrl@502bdd24f7921290",
+     "scores": {
+      "field_accuracy": 0.5714,
+      "grounded_accuracy": 0.4,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "near_miss",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.733
+       },
+       "policy_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "near_miss",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.612
+       },
+       "date_of_loss": {
+        "error_type": "near_miss",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.619
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.781
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.76
+       }
+      }
+     }
+    },
+    "grpo": {
+     "response": {
+      "request_id": "grpo_v1_v2_greedy_test/test-00005",
+      "fields": {
+       "claim_number": {
+        "value": "CLM-2025-846874",
+        "evidence_text": "CLM-2025-846874",
+        "page": 1,
+        "bbox": [
+         722.0,
+         274.0,
+         856.0,
+         292.0
+        ]
+       },
+       "policy_number": null,
+       "claimant_name": {
+        "value": "Cuadalope Rodriguez",
+        "evidence_text": "Cuadalope Rodriguez",
+        "page": 1,
+        "bbox": [
+         72.0,
+         192.0,
+         236.0,
+         214.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-07-01",
+        "evidence_text": "07 Jul 2025",
+        "page": 1,
+        "bbox": [
+         722.0,
+         241.0,
+         824.0,
+         259.0
+        ]
+       },
+       "provider_name": {
+        "value": "Kingsway Auto Glass",
+        "evidence_text": "Kingsway Auto Glass",
+        "page": 1,
+        "bbox": [
+         79.0,
+         38.0,
+         341.0,
+         72.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "1459.46",
+        "evidence_text": "$1,459.46",
+        "page": 1,
+        "bbox": [
+         799.0,
+         626.0,
+         882.0,
+         646.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": true,
+       "reasons": [
+        "date_of_loss: value does not match its own evidence text"
+       ]
+      },
+      "model": "GRPO",
+      "latency_ms": 21093.5,
+      "audit": {
+       "record_hash": "5c65309b5e676edc4be9f7ca43f696c10a7a3056392aa7e6a86ab91baacd982a",
+       "prev_hash": "7f8584a06086e479c884ec558d3c66d440877f282c80495279937f7336f7e14a"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"CLM-2025-846874\", \"evidence_text\": \"CLM-2025-846874\", \"page\": 1, \"bbox\": [722, 274, 856, 292]},\n  \"policy_number\": null,\n  \"claimant_name\": {\"value\": \"Cuadalope Rodriguez\", \"evidence_text\": \"Cuadalope Rodriguez\", \"page\": 1, \"bbox\": [72, 192, 236, 214]},\n  \"date_of_loss\": {\"value\": \"2025-07-01\", \"evidence_text\": \"07 Jul 2025\", \"page\": 1, \"bbox\": [722, 241, 824, 259]},\n  \"provider_name\": {\"value\": \"Kingsway Auto Glass\", \"evidence_text\": \"Kingsway Auto Glass\", \"page\": 1, \"bbox\": [79, 38, 341, 72]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"1459.46\", \"evidence_text\": \"$1,459.46\", \"page\": 1, \"bbox\": [799, 626, 882, 646]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+grpo_v1@7c67a0ea535bac43",
+     "scores": {
+      "field_accuracy": 0.5714,
+      "grounded_accuracy": 0.4,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "near_miss",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.673
+       },
+       "policy_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "near_miss",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.729
+       },
+       "date_of_loss": {
+        "error_type": "near_miss",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.69
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.751
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.777
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "doc_id": "test-00089",
+   "split": "test",
+   "doc_type": "claim_form",
+   "note": "SFT v2 swaps two fields; GRPO gets this one right.",
+   "image": "replay/images/test-00089.jpg",
+   "width": 980,
+   "height": 1260,
+   "gold": {
+    "claim_number": {
+     "value": "24-2645-HL",
+     "evidence_text": "24-2645-HL",
+     "page": 1,
+     "bbox": [
+      234.9,
+      430.1,
+      329.9,
+      442.1
+     ]
+    },
+    "policy_number": {
+     "value": "POL-806-1661-G",
+     "evidence_text": "POL-806-1661-G",
+     "page": 1,
+     "bbox": [
+      234.9,
+      252.0,
+      372.9,
+      264.1
+     ]
+    },
+    "claimant_name": {
+     "value": "Miguel Gonz\u00e1lez",
+     "evidence_text": "Miguel Gonz\u00e1lez",
+     "page": 1,
+     "bbox": [
+      247.9,
+      205.0,
+      388.9,
+      223.1
+     ]
+    },
+    "date_of_loss": {
+     "value": "2024-10-05",
+     "evidence_text": "05 Oct 2024",
+     "page": 1,
+     "bbox": [
+      234.9,
+      476.1,
+      333.0,
+      488.1
+     ]
+    },
+    "provider_name": {
+     "value": "Crestview Medical Centre",
+     "evidence_text": "Crestview Medical Centre",
+     "page": 1,
+     "bbox": [
+      248.0,
+      665.0,
+      453.0,
+      678.1
+     ]
+    },
+    "incident_type": {
+     "value": "Slip and fall injury",
+     "evidence_text": "Slip and fall injury",
+     "page": 1,
+     "bbox": [
+      659.9,
+      474.9,
+      801.0,
+      491.9
+     ]
+    },
+    "total_amount": {
+     "value": "6895.20",
+     "evidence_text": "CAD 6,895.20",
+     "page": 1,
+     "bbox": [
+      660.1,
+      787.9,
+      773.1,
+      801.9
+     ]
+    }
+   },
+   "predictions": {
+    "baseline": {
+     "response": {
+      "request_id": "baseline_v2_greedy_test/test-00089",
+      "fields": {
+       "claim_number": {
+        "value": "24-2645-HL",
+        "evidence_text": "24-2645-HL",
+        "page": 1,
+        "bbox": [
+         232.0,
+         310.0,
+         372.0,
+         332.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-806-1661-G",
+        "evidence_text": "POL-806-1661-G",
+        "page": 1,
+        "bbox": [
+         232.0,
+         130.0,
+         372.0,
+         152.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Miguel Gonz\u00e1lez",
+        "evidence_text": "Miguel Gonz\u00e1lez",
+        "page": 1,
+        "bbox": [
+         248.0,
+         188.0,
+         340.0,
+         209.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2024-10-05",
+        "evidence_text": "05 Oct 2024",
+        "page": 1,
+        "bbox": [
+         232.0,
+         402.0,
+         318.0,
+         424.0
+        ]
+       },
+       "provider_name": {
+        "value": "Crestview Medical Centre",
+        "evidence_text": "Crestview Medical Centre",
+        "page": 1,
+        "bbox": [
+         248.0,
+         542.0,
+         372.0,
+         564.0
+        ]
+       },
+       "incident_type": {
+        "value": "Slip and fall injury",
+        "evidence_text": "Slip and fall injury",
+        "page": 1,
+        "bbox": [
+         248.0,
+         402.0,
+         372.0,
+         424.0
+        ]
+       },
+       "total_amount": {
+        "value": "6,895.20",
+        "evidence_text": "CAD 6,895.20",
+        "page": 1,
+        "bbox": [
+         659.0,
+         610.0,
+         771.0,
+         632.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "Baseline (prompt only)",
+      "latency_ms": 33461.2,
+      "audit": {
+       "record_hash": "62ab06c344c5459440253b2dc6cfa8ca68d7220850090719ac811ef6b4e9eb1f",
+       "prev_hash": "c7f6d736cfb48f0cee2e776514ca8cac87ec6c9be05559078e3a5ccf016649f4"
+      }
+     },
+     "raw_output": "```json\n{\n  \"claim_number\": {\"value\": \"24-2645-HL\", \"evidence_text\": \"24-2645-HL\", \"page\": 1, \"bbox\": [232, 310, 372, 332]},\n  \"policy_number\": {\"value\": \"POL-806-1661-G\", \"evidence_text\": \"POL-806-1661-G\", \"page\": 1, \"bbox\": [232, 130, 372, 152]},\n  \"claimant_name\": {\"value\": \"Miguel Gonz\u00e1lez\", \"evidence_text\": \"Miguel Gonz\u00e1lez\", \"page\": 1, \"bbox\": [248, 188, 340, 209]},\n  \"date_of_loss\": {\"value\": \"2024-10-05\", \"evidence_text\": \"05 Oct 2024\", \"page\": 1, \"bbox\": [232, 402, 318, 424]},\n  \"provider_name\": {\"value\": \"Crestview Medical Centre\", \"evidence_text\": \"Crestview Medical Centre\", \"page\": 1, \"bbox\": [248, 542, 372, 564]},\n  \"incident_type\": {\"value\": \"Slip and fall injury\", \"evidence_text\": \"Slip and fall injury\", \"page\": 1, \"bbox\": [248, 402, 372, 424]},\n  \"total_amount\": {\"value\": \"6,895.20\", \"evidence_text\": \"CAD 6,895.20\", \"page\": 1, \"bbox\": [659, 610, 771, 632]}\n}\n```",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 0.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.089
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       }
+      }
+     }
+    },
+    "sft_v2": {
+     "response": {
+      "request_id": "sft_v2ctrl_v2_greedy_test/test-00089",
+      "fields": {
+       "claim_number": {
+        "value": "POL-806-1661-G",
+        "evidence_text": "POL-806-1661-G",
+        "page": 1,
+        "bbox": [
+         235.0,
+         252.0,
+         372.0,
+         264.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-806-1661-G",
+        "evidence_text": "POL-806-1661-G",
+        "page": 1,
+        "bbox": [
+         235.0,
+         252.0,
+         372.0,
+         264.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Miguel Gonz\u00e1lez",
+        "evidence_text": "Miguel Gonz\u00e1lez",
+        "page": 1,
+        "bbox": [
+         248.0,
+         206.0,
+         389.0,
+         222.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2024-10-05",
+        "evidence_text": "05 Oct 2024",
+        "page": 1,
+        "bbox": [
+         235.0,
+         476.0,
+         333.0,
+         490.0
+        ]
+       },
+       "provider_name": {
+        "value": "Crestview Medical Centre",
+        "evidence_text": "Crestview Medical Centre",
+        "page": 1,
+        "bbox": [
+         248.0,
+         665.0,
+         452.0,
+         682.0
+        ]
+       },
+       "incident_type": {
+        "value": "Slip and fall injury",
+        "evidence_text": "Slip and fall injury",
+        "page": 1,
+        "bbox": [
+         660.0,
+         475.0,
+         800.0,
+         492.0
+        ]
+       },
+       "total_amount": {
+        "value": "6895.20",
+        "evidence_text": "CAD 6,895.20",
+        "page": 1,
+        "bbox": [
+         660.0,
+         788.0,
+         773.0,
+         802.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "SFT v2",
+      "latency_ms": 26633.3,
+      "audit": {
+       "record_hash": "4a3c91e9446afff0a353f567ba8f63acd23d17c050655bfb5b7bf9a68ce21c96",
+       "prev_hash": "8fe8de713fe6166b8aca0b9ca1128632dda8201fd599465214697628df7568a5"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"POL-806-1661-G\", \"evidence_text\": \"POL-806-1661-G\", \"page\": 1, \"bbox\": [235, 252, 372, 264]},\n  \"policy_number\": {\"value\": \"POL-806-1661-G\", \"evidence_text\": \"POL-806-1661-G\", \"page\": 1, \"bbox\": [235, 252, 372, 264]},\n  \"claimant_name\": {\"value\": \"Miguel Gonz\u00e1lez\", \"evidence_text\": \"Miguel Gonz\u00e1lez\", \"page\": 1, \"bbox\": [248, 206, 389, 222]},\n  \"date_of_loss\": {\"value\": \"2024-10-05\", \"evidence_text\": \"05 Oct 2024\", \"page\": 1, \"bbox\": [235, 476, 333, 490]},\n  \"provider_name\": {\"value\": \"Crestview Medical Centre\", \"evidence_text\": \"Crestview Medical Centre\", \"page\": 1, \"bbox\": [248, 665, 452, 682]},\n  \"incident_type\": {\"value\": \"Slip and fall injury\", \"evidence_text\": \"Slip and fall injury\", \"page\": 1, \"bbox\": [660, 475, 800, 492]},\n  \"total_amount\": {\"value\": \"6895.20\", \"evidence_text\": \"CAD 6,895.20\", \"page\": 1, \"bbox\": [660, 788, 773, 802]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+sft_v2ctrl@502bdd24f7921290",
+     "scores": {
+      "field_accuracy": 0.8571,
+      "grounded_accuracy": 0.8571,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "field_swap",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.985
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.883
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.856
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.768
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.981
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.984
+       }
+      }
+     }
+    },
+    "grpo": {
+     "response": {
+      "request_id": "grpo_v1_v2_greedy_test/test-00089",
+      "fields": {
+       "claim_number": {
+        "value": "24-2645-HL",
+        "evidence_text": "24-2645-HL",
+        "page": 1,
+        "bbox": [
+         235.0,
+         430.0,
+         329.0,
+         442.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-806-1661-G",
+        "evidence_text": "POL-806-1661-G",
+        "page": 1,
+        "bbox": [
+         235.0,
+         252.0,
+         372.0,
+         264.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Miguel Gonz\u00e1lez",
+        "evidence_text": "Miguel Gonz\u00e1lez",
+        "page": 1,
+        "bbox": [
+         247.0,
+         206.0,
+         389.0,
+         222.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2024-10-05",
+        "evidence_text": "05 Oct 2024",
+        "page": 1,
+        "bbox": [
+         235.0,
+         476.0,
+         333.0,
+         488.0
+        ]
+       },
+       "provider_name": {
+        "value": "Crestview Medical Centre",
+        "evidence_text": "Crestview Medical Centre",
+        "page": 1,
+        "bbox": [
+         247.0,
+         665.0,
+         452.0,
+         683.0
+        ]
+       },
+       "incident_type": {
+        "value": "Slip and fall injury",
+        "evidence_text": "Slip and fall injury",
+        "page": 1,
+        "bbox": [
+         660.0,
+         474.0,
+         800.0,
+         492.0
+        ]
+       },
+       "total_amount": {
+        "value": "6895.20",
+        "evidence_text": "CAD 6,895.20",
+        "page": 1,
+        "bbox": [
+         660.0,
+         787.0,
+         773.0,
+         802.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "GRPO",
+      "latency_ms": 27209.5,
+      "audit": {
+       "record_hash": "6b2268738fe075df2418523802838b3bba6f663d4ea8750494f5f5c7cf4c1de5",
+       "prev_hash": "802c4af6ef734191b49b84d4d531f6ab126c33a72e17845be8f2a538415b7279"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"24-2645-HL\", \"evidence_text\": \"24-2645-HL\", \"page\": 1, \"bbox\": [235, 430, 329, 442]},\n  \"policy_number\": {\"value\": \"POL-806-1661-G\", \"evidence_text\": \"POL-806-1661-G\", \"page\": 1, \"bbox\": [235, 252, 372, 264]},\n  \"claimant_name\": {\"value\": \"Miguel Gonz\u00e1lez\", \"evidence_text\": \"Miguel Gonz\u00e1lez\", \"page\": 1, \"bbox\": [247, 206, 389, 222]},\n  \"date_of_loss\": {\"value\": \"2024-10-05\", \"evidence_text\": \"05 Oct 2024\", \"page\": 1, \"bbox\": [235, 476, 333, 488]},\n  \"provider_name\": {\"value\": \"Crestview Medical Centre\", \"evidence_text\": \"Crestview Medical Centre\", \"page\": 1, \"bbox\": [247, 665, 452, 683]},\n  \"incident_type\": {\"value\": \"Slip and fall injury\", \"evidence_text\": \"Slip and fall injury\", \"page\": 1, \"bbox\": [660, 474, 800, 492]},\n  \"total_amount\": {\"value\": \"6895.20\", \"evidence_text\": \"CAD 6,895.20\", \"page\": 1, \"bbox\": [660, 787, 773, 802]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+grpo_v1@7c67a0ea535bac43",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 1.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.973
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.985
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.878
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.982
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.722
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.937
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.932
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "doc_id": "holdout-00000",
+   "split": "holdout",
+   "doc_type": "claim_form_b",
+   "note": "Unseen label \"Our reference\": the baseline and GRPO return no claim number; SFT v2, trained on randomised labels, finds it.",
+   "image": "replay/images/holdout-00000.jpg",
+   "width": 980,
+   "height": 1260,
+   "gold": {
+    "claim_number": {
+     "value": "C-81554370",
+     "evidence_text": "C-81554370",
+     "page": 1,
+     "bbox": [
+      48.0,
+      246.8,
+      147.1,
+      259.3
+     ]
+    },
+    "policy_number": {
+     "value": "NG4003915",
+     "evidence_text": "NG4003915",
+     "page": 1,
+     "bbox": [
+      497.7,
+      182.4,
+      594.7,
+      195.0
+     ]
+    },
+    "claimant_name": {
+     "value": "Fatima Aziz",
+     "evidence_text": "Fatima Aziz",
+     "page": 1,
+     "bbox": [
+      47.7,
+      183.8,
+      140.7,
+      197.3
+     ]
+    },
+    "date_of_loss": {
+     "value": "2025-12-24",
+     "evidence_text": "24 Dec 2025",
+     "page": 1,
+     "bbox": [
+      498.0,
+      244.4,
+      600.0,
+      257.0
+     ]
+    },
+    "provider_name": {
+     "value": "Crestview Medical Centre",
+     "evidence_text": "Crestview Medical Centre",
+     "page": 1,
+     "bbox": [
+      48.6,
+      369.2,
+      253.7,
+      383.3
+     ]
+    },
+    "incident_type": {
+     "value": "Dental injury",
+     "evidence_text": "Dental injury",
+     "page": 1,
+     "bbox": [
+      48.3,
+      307.8,
+      148.4,
+      325.3
+     ]
+    },
+    "total_amount": {
+     "value": "7473.64",
+     "evidence_text": "7,473.64",
+     "page": 1,
+     "bbox": [
+      515.8,
+      592.4,
+      601.9,
+      610.9
+     ]
+    }
+   },
+   "predictions": {
+    "baseline": {
+     "response": {
+      "request_id": "baseline_v2_greedy_holdout/holdout-00000",
+      "fields": {
+       "claim_number": null,
+       "policy_number": {
+        "value": "NG4003915",
+        "evidence_text": "NG4003915",
+        "page": 1,
+        "bbox": [
+         500.0,
+         152.0,
+         564.0,
+         174.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Fatima Aziz",
+        "evidence_text": "Fatima Aziz",
+        "page": 1,
+        "bbox": [
+         48.0,
+         178.0,
+         139.0,
+         200.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-12-24",
+        "evidence_text": "24 Dec 2025",
+        "page": 1,
+        "bbox": [
+         498.0,
+         214.0,
+         564.0,
+         234.0
+        ]
+       },
+       "provider_name": {
+        "value": "Crestview Medical Centre",
+        "evidence_text": "Crestview Medical Centre",
+        "page": 1,
+        "bbox": [
+         48.0,
+         339.0,
+         226.0,
+         359.0
+        ]
+       },
+       "incident_type": {
+        "value": "Dental injury",
+        "evidence_text": "Dental injury",
+        "page": 1,
+        "bbox": [
+         48.0,
+         305.0,
+         146.0,
+         325.0
+        ]
+       },
+       "total_amount": {
+        "value": "7,473.64",
+        "evidence_text": "7,473.64",
+        "page": 1,
+        "bbox": [
+         516.0,
+         555.0,
+         604.0,
+         583.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "Baseline (prompt only)",
+      "latency_ms": 24523.9,
+      "audit": {
+       "record_hash": "59b01497b56c82c3e536536603e392a83932a00ce9a345225b5e3f642f71661a",
+       "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+     },
+     "raw_output": "```json\n{\n  \"claim_number\": null,\n  \"policy_number\": {\"value\": \"NG4003915\", \"evidence_text\": \"NG4003915\", \"page\": 1, \"bbox\": [500, 152, 564, 174]},\n  \"claimant_name\": {\"value\": \"Fatima Aziz\", \"evidence_text\": \"Fatima Aziz\", \"page\": 1, \"bbox\": [48, 178, 139, 200]},\n  \"date_of_loss\": {\"value\": \"2025-12-24\", \"evidence_text\": \"24 Dec 2025\", \"page\": 1, \"bbox\": [498, 214, 564, 234]},\n  \"provider_name\": {\"value\": \"Crestview Medical Centre\", \"evidence_text\": \"Crestview Medical Centre\", \"page\": 1, \"bbox\": [48, 339, 226, 359]},\n  \"incident_type\": {\"value\": \"Dental injury\", \"evidence_text\": \"Dental injury\", \"page\": 1, \"bbox\": [48, 305, 146, 325]},\n  \"total_amount\": {\"value\": \"7,473.64\", \"evidence_text\": \"7,473.64\", \"page\": 1, \"bbox\": [516, 555, 604, 583]}\n}\n```",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+     "scores": {
+      "field_accuracy": 0.8571,
+      "grounded_accuracy": 0.2857,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "missed",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.605
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.827
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       }
+      }
+     }
+    },
+    "sft_v2": {
+     "response": {
+      "request_id": "sft_v2ctrl_v2_greedy_holdout/holdout-00000",
+      "fields": {
+       "claim_number": {
+        "value": "C-81554370",
+        "evidence_text": "C-81554370",
+        "page": 1,
+        "bbox": [
+         48.0,
+         247.0,
+         147.0,
+         259.0
+        ]
+       },
+       "policy_number": {
+        "value": "NG4003915",
+        "evidence_text": "NG4003915",
+        "page": 1,
+        "bbox": [
+         498.0,
+         182.0,
+         594.0,
+         197.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Fatima Aziz",
+        "evidence_text": "Fatima Aziz",
+        "page": 1,
+        "bbox": [
+         48.0,
+         184.0,
+         140.0,
+         200.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-12-24",
+        "evidence_text": "24 Dec 2025",
+        "page": 1,
+        "bbox": [
+         498.0,
+         244.0,
+         600.0,
+         259.0
+        ]
+       },
+       "provider_name": {
+        "value": "Crestview Medical Centre",
+        "evidence_text": "Crestview Medical Centre",
+        "page": 1,
+        "bbox": [
+         48.0,
+         369.0,
+         253.0,
+         386.0
+        ]
+       },
+       "incident_type": {
+        "value": "Dental injury",
+        "evidence_text": "Dental injury",
+        "page": 1,
+        "bbox": [
+         48.0,
+         308.0,
+         148.0,
+         324.0
+        ]
+       },
+       "total_amount": {
+        "value": "7473.64",
+        "evidence_text": "7,473.64",
+        "page": 1,
+        "bbox": [
+         516.0,
+         592.0,
+         601.0,
+         612.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "SFT v2",
+      "latency_ms": 25660.3,
+      "audit": {
+       "record_hash": "38aa4a67f3297310890a296e8573770a64ff47349c5f981c00cc1170e3c33dd3",
+       "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"C-81554370\", \"evidence_text\": \"C-81554370\", \"page\": 1, \"bbox\": [48, 247, 147, 259]},\n  \"policy_number\": {\"value\": \"NG4003915\", \"evidence_text\": \"NG4003915\", \"page\": 1, \"bbox\": [498, 182, 594, 197]},\n  \"claimant_name\": {\"value\": \"Fatima Aziz\", \"evidence_text\": \"Fatima Aziz\", \"page\": 1, \"bbox\": [48, 184, 140, 200]},\n  \"date_of_loss\": {\"value\": \"2025-12-24\", \"evidence_text\": \"24 Dec 2025\", \"page\": 1, \"bbox\": [498, 244, 600, 259]},\n  \"provider_name\": {\"value\": \"Crestview Medical Centre\", \"evidence_text\": \"Crestview Medical Centre\", \"page\": 1, \"bbox\": [48, 369, 253, 386]},\n  \"incident_type\": {\"value\": \"Dental injury\", \"evidence_text\": \"Dental injury\", \"page\": 1, \"bbox\": [48, 308, 148, 324]},\n  \"total_amount\": {\"value\": \"7473.64\", \"evidence_text\": \"7,473.64\", \"page\": 1, \"bbox\": [516, 592, 601, 612]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+sft_v2ctrl@502bdd24f7921290",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 1.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.959
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.833
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.814
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.84
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.825
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.908
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.914
+       }
+      }
+     }
+    },
+    "grpo": {
+     "response": {
+      "request_id": "grpo_v1_v2_greedy_holdout/holdout-00000",
+      "fields": {
+       "claim_number": null,
+       "policy_number": {
+        "value": "NG4003915",
+        "evidence_text": "NG4003915",
+        "page": 1,
+        "bbox": [
+         498.0,
+         182.0,
+         594.0,
+         198.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Fatima Aziz",
+        "evidence_text": "Fatima Aziz",
+        "page": 1,
+        "bbox": [
+         48.0,
+         182.0,
+         140.0,
+         200.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-12-24",
+        "evidence_text": "24 Dec 2025",
+        "page": 1,
+        "bbox": [
+         498.0,
+         243.0,
+         600.0,
+         259.0
+        ]
+       },
+       "provider_name": {
+        "value": "Crestview Medical Centre",
+        "evidence_text": "Crestview Medical Centre",
+        "page": 1,
+        "bbox": [
+         48.0,
+         368.0,
+         253.0,
+         386.0
+        ]
+       },
+       "incident_type": {
+        "value": "Dental injury",
+        "evidence_text": "Dental injury",
+        "page": 1,
+        "bbox": [
+         48.0,
+         307.0,
+         148.0,
+         324.0
+        ]
+       },
+       "total_amount": {
+        "value": "7473.64",
+        "evidence_text": "7,473.64",
+        "page": 1,
+        "bbox": [
+         516.0,
+         591.0,
+         601.0,
+         612.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "GRPO",
+      "latency_ms": 22825.8,
+      "audit": {
+       "record_hash": "75883542aeea4c18ef8d5e47d979af9863a0f7d99ab5296ca31ed75aefc907e4",
+       "prev_hash": "0000000000000000000000000000000000000000000000000000000000000000"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": null,\n  \"policy_number\": {\"value\": \"NG4003915\", \"evidence_text\": \"NG4003915\", \"page\": 1, \"bbox\": [498, 182, 594, 198]},\n  \"claimant_name\": {\"value\": \"Fatima Aziz\", \"evidence_text\": \"Fatima Aziz\", \"page\": 1, \"bbox\": [48, 182, 140, 200]},\n  \"date_of_loss\": {\"value\": \"2025-12-24\", \"evidence_text\": \"24 Dec 2025\", \"page\": 1, \"bbox\": [498, 243, 600, 259]},\n  \"provider_name\": {\"value\": \"Crestview Medical Centre\", \"evidence_text\": \"Crestview Medical Centre\", \"page\": 1, \"bbox\": [48, 368, 253, 386]},\n  \"incident_type\": {\"value\": \"Dental injury\", \"evidence_text\": \"Dental injury\", \"page\": 1, \"bbox\": [48, 307, 148, 324]},\n  \"total_amount\": {\"value\": \"7473.64\", \"evidence_text\": \"7,473.64\", \"page\": 1, \"bbox\": [516, 591, 601, 612]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+grpo_v1@7c67a0ea535bac43",
+     "scores": {
+      "field_accuracy": 0.8571,
+      "grounded_accuracy": 0.8571,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "missed",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.781
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.744
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.787
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.779
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.879
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.871
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "doc_id": "holdout-00035",
+   "split": "holdout",
+   "doc_type": "invoice_b",
+   "note": "Unseen layout with a distractor ID; the baseline takes the bait, the fine-tuned models don't.",
+   "image": "replay/images/holdout-00035.jpg",
+   "width": 980,
+   "height": 1260,
+   "gold": {
+    "claim_number": null,
+    "policy_number": {
+     "value": "POL-638-8621-J",
+     "evidence_text": "POL-638-8621-J",
+     "page": 1,
+     "bbox": [
+      741.3,
+      241.9,
+      852.4,
+      252.3
+     ]
+    },
+    "claimant_name": {
+     "value": "Sof\u00eda Ram\u00edrez",
+     "evidence_text": "Sof\u00eda Ram\u00edrez",
+     "page": 1,
+     "bbox": [
+      61.5,
+      183.5,
+      176.6,
+      197.9
+     ]
+    },
+    "date_of_loss": {
+     "value": "2024-05-03",
+     "evidence_text": "05/03/2024",
+     "page": 1,
+     "bbox": [
+      741.4,
+      214.9,
+      816.5,
+      226.1
+     ]
+    },
+    "provider_name": {
+     "value": "Allied Home Repair",
+     "evidence_text": "Allied Home Repair",
+     "page": 1,
+     "bbox": [
+      561.9,
+      54.2,
+      746.0,
+      73.9
+     ]
+    },
+    "incident_type": null,
+    "total_amount": {
+     "value": "1675.67",
+     "evidence_text": "$1675.67",
+     "page": 1,
+     "bbox": [
+      790.4,
+      510.0,
+      869.4,
+      525.3
+     ]
+    }
+   },
+   "predictions": {
+    "baseline": {
+     "response": {
+      "request_id": "baseline_v2_greedy_holdout/holdout-00035",
+      "fields": {
+       "claim_number": {
+        "value": "2024-2785",
+        "evidence_text": "2024-2785",
+        "page": 1,
+        "bbox": [
+         630.0,
+         160.0,
+         811.0,
+         178.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-638-8621-J",
+        "evidence_text": "POL-638-8621-J",
+        "page": 1,
+        "bbox": [
+         741.0,
+         239.0,
+         850.0,
+         256.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Sof\u00eda Ram\u00edrez",
+        "evidence_text": "Sof\u00eda Ram\u00edrez",
+        "page": 1,
+        "bbox": [
+         62.0,
+         184.0,
+         174.0,
+         202.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2024-05-03",
+        "evidence_text": "05/03/2024",
+        "page": 1,
+        "bbox": [
+         54.0,
+         344.0,
+         85.0,
+         359.0
+        ]
+       },
+       "provider_name": {
+        "value": "Allied Home Repair",
+        "evidence_text": "Allied Home Repair",
+        "page": 1,
+        "bbox": [
+         451.0,
+         53.0,
+         632.0,
+         72.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "1675.67",
+        "evidence_text": "$1675.67",
+        "page": 1,
+        "bbox": [
+         789.0,
+         620.0,
+         868.0,
+         638.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "Baseline (prompt only)",
+      "latency_ms": 23908.2,
+      "audit": {
+       "record_hash": "85cf2b25c69ac4d1ee5df146241afb7584aa73ba735527749e8f353b4d491acd",
+       "prev_hash": "22640cc3ceb54c7967132ad2ebab6a841ea348337d16756dd1b83230f99c03e9"
+      }
+     },
+     "raw_output": "```json\n{\n  \"claim_number\": {\"value\": \"2024-2785\", \"evidence_text\": \"2024-2785\", \"page\": 1, \"bbox\": [630, 160, 811, 178]},\n  \"policy_number\": {\"value\": \"POL-638-8621-J\", \"evidence_text\": \"POL-638-8621-J\", \"page\": 1, \"bbox\": [741, 239, 850, 256]},\n  \"claimant_name\": {\"value\": \"Sof\u00eda Ram\u00edrez\", \"evidence_text\": \"Sof\u00eda Ram\u00edrez\", \"page\": 1, \"bbox\": [62, 184, 174, 202]},\n  \"date_of_loss\": {\"value\": \"2024-05-03\", \"evidence_text\": \"05/03/2024\", \"page\": 1, \"bbox\": [54, 344, 85, 359]},\n  \"provider_name\": {\"value\": \"Allied Home Repair\", \"evidence_text\": \"Allied Home Repair\", \"page\": 1, \"bbox\": [451, 53, 632, 72]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"1675.67\", \"evidence_text\": \"$1675.67\", \"page\": 1, \"bbox\": [789, 620, 868, 638]}\n}\n```",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+     "scores": {
+      "field_accuracy": 0.8571,
+      "grounded_accuracy": 0.4,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "distractor_for_absent",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.602
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.736
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.214
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       }
+      }
+     }
+    },
+    "sft_v2": {
+     "response": {
+      "request_id": "sft_v2ctrl_v2_greedy_holdout/holdout-00035",
+      "fields": {
+       "claim_number": null,
+       "policy_number": {
+        "value": "POL-638-8621-J",
+        "evidence_text": "POL-638-8621-J",
+        "page": 1,
+        "bbox": [
+         742.0,
+         242.0,
+         852.0,
+         254.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Sof\u00eda Ram\u00edrez",
+        "evidence_text": "Sof\u00eda Ram\u00edrez",
+        "page": 1,
+        "bbox": [
+         62.0,
+         185.0,
+         177.0,
+         202.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2024-05-03",
+        "evidence_text": "05/03/2024",
+        "page": 1,
+        "bbox": [
+         741.0,
+         215.0,
+         817.0,
+         227.0
+        ]
+       },
+       "provider_name": {
+        "value": "Allied Home Repair",
+        "evidence_text": "Allied Home Repair",
+        "page": 1,
+        "bbox": [
+         563.0,
+         54.0,
+         746.0,
+         74.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "1675.67",
+        "evidence_text": "$1675.67",
+        "page": 1,
+        "bbox": [
+         791.0,
+         511.0,
+         870.0,
+         528.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "SFT v2",
+      "latency_ms": 20099.3,
+      "audit": {
+       "record_hash": "d46f8104bcc1183dec0ab9347654df7135368d8dd34eb25fb7b0be5d416a4016",
+       "prev_hash": "cca9789a7669f5c7bf8c6bc851e545d083503d6fc857a1e716a65b0cb67d1297"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": null,\n  \"policy_number\": {\"value\": \"POL-638-8621-J\", \"evidence_text\": \"POL-638-8621-J\", \"page\": 1, \"bbox\": [742, 242, 852, 254]},\n  \"claimant_name\": {\"value\": \"Sof\u00eda Ram\u00edrez\", \"evidence_text\": \"Sof\u00eda Ram\u00edrez\", \"page\": 1, \"bbox\": [62, 185, 177, 202]},\n  \"date_of_loss\": {\"value\": \"2024-05-03\", \"evidence_text\": \"05/03/2024\", \"page\": 1, \"bbox\": [741, 215, 817, 227]},\n  \"provider_name\": {\"value\": \"Allied Home Repair\", \"evidence_text\": \"Allied Home Repair\", \"page\": 1, \"bbox\": [563, 54, 746, 74]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"1675.67\", \"evidence_text\": \"$1675.67\", \"page\": 1, \"bbox\": [791, 511, 870, 528]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+sft_v2ctrl@502bdd24f7921290",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 1.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.844
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.693
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.907
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.979
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.784
+       }
+      }
+     }
+    },
+    "grpo": {
+     "response": {
+      "request_id": "grpo_v1_v2_greedy_holdout/holdout-00035",
+      "fields": {
+       "claim_number": null,
+       "policy_number": {
+        "value": "POL-638-8621-J",
+        "evidence_text": "POL-638-8621-J",
+        "page": 1,
+        "bbox": [
+         742.0,
+         242.0,
+         852.0,
+         254.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Sof\u00eda Ram\u00edrez",
+        "evidence_text": "Sof\u00eda Ram\u00edrez",
+        "page": 1,
+        "bbox": [
+         62.0,
+         184.0,
+         177.0,
+         202.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2024-05-03",
+        "evidence_text": "05/03/2024",
+        "page": 1,
+        "bbox": [
+         741.0,
+         215.0,
+         817.0,
+         227.0
+        ]
+       },
+       "provider_name": {
+        "value": "Allied Home Repair",
+        "evidence_text": "Allied Home Repair",
+        "page": 1,
+        "bbox": [
+         563.0,
+         54.0,
+         746.0,
+         73.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "1675.67",
+        "evidence_text": "$1675.67",
+        "page": 1,
+        "bbox": [
+         791.0,
+         510.0,
+         870.0,
+         527.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "GRPO",
+      "latency_ms": 20899.4,
+      "audit": {
+       "record_hash": "713e4d7ce91383f4f0218dba6e78df0ec97474409d6b84fe92151be021dd4c0d",
+       "prev_hash": "ec1e9e027b0bacbb10af73bfd9cec7897ebf245993d25e67283d61ecd51b6715"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": null,\n  \"policy_number\": {\"value\": \"POL-638-8621-J\", \"evidence_text\": \"POL-638-8621-J\", \"page\": 1, \"bbox\": [742, 242, 852, 254]},\n  \"claimant_name\": {\"value\": \"Sof\u00eda Ram\u00edrez\", \"evidence_text\": \"Sof\u00eda Ram\u00edrez\", \"page\": 1, \"bbox\": [62, 184, 177, 202]},\n  \"date_of_loss\": {\"value\": \"2024-05-03\", \"evidence_text\": \"05/03/2024\", \"page\": 1, \"bbox\": [741, 215, 817, 227]},\n  \"provider_name\": {\"value\": \"Allied Home Repair\", \"evidence_text\": \"Allied Home Repair\", \"page\": 1, \"bbox\": [563, 54, 746, 73]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"1675.67\", \"evidence_text\": \"$1675.67\", \"page\": 1, \"bbox\": [791, 510, 870, 527]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+grpo_v1@7c67a0ea535bac43",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 1.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.844
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.746
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.907
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.939
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.887
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "doc_id": "holdout-00068",
+   "split": "holdout",
+   "doc_type": "claim_form_b",
+   "note": "The baseline reads every value correctly but its boxes miss; GRPO abstains on the \"Our reference\" claim number.",
+   "image": "replay/images/holdout-00068.jpg",
+   "width": 980,
+   "height": 1260,
+   "gold": {
+    "claim_number": {
+     "value": "C-45460447",
+     "evidence_text": "C-45460447",
+     "page": 1,
+     "bbox": [
+      45.2,
+      249.3,
+      144.3,
+      262.6
+     ]
+    },
+    "policy_number": {
+     "value": "POL-411-5831-B",
+     "evidence_text": "POL-411-5831-B",
+     "page": 1,
+     "bbox": [
+      494.4,
+      181.2,
+      630.5,
+      194.9
+     ]
+    },
+    "claimant_name": {
+     "value": "Imran Khan",
+     "evidence_text": "Imran Khan",
+     "page": 1,
+     "bbox": [
+      44.4,
+      186.4,
+      137.6,
+      200.6
+     ]
+    },
+    "date_of_loss": {
+     "value": "2024-02-01",
+     "evidence_text": "01 Feb 2024",
+     "page": 1,
+     "bbox": [
+      495.1,
+      242.6,
+      596.3,
+      256.9
+     ]
+    },
+    "provider_name": {
+     "value": "Riverside Physiotherapy Clinic",
+     "evidence_text": "Riverside Physiotherapy Clinic",
+     "page": 1,
+     "bbox": [
+      46.7,
+      370.5,
+      289.9,
+      390.5
+     ]
+    },
+    "incident_type": {
+     "value": "Emergency room visit",
+     "evidence_text": "Emergency room visit",
+     "page": 1,
+     "bbox": [
+      46.0,
+      309.4,
+      219.2,
+      328.6
+     ]
+    },
+    "total_amount": {
+     "value": "7268.87",
+     "evidence_text": "CAD 7,268.87",
+     "page": 1,
+     "bbox": [
+      515.5,
+      590.9,
+      654.7,
+      610.7
+     ]
+    }
+   },
+   "predictions": {
+    "baseline": {
+     "response": {
+      "request_id": "baseline_v2_greedy_holdout/holdout-00068",
+      "fields": {
+       "claim_number": {
+        "value": "C-45460447",
+        "evidence_text": "C-45460447",
+        "page": 1,
+        "bbox": [
+         48.0,
+         238.0,
+         142.0,
+         263.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-411-5831-B",
+        "evidence_text": "POL-411-5831-B",
+        "page": 1,
+        "bbox": [
+         494.0,
+         178.0,
+         628.0,
+         200.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Imran Khan",
+        "evidence_text": "Imran Khan",
+        "page": 1,
+        "bbox": [
+         44.0,
+         184.0,
+         135.0,
+         204.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2024-02-01",
+        "evidence_text": "01 Feb 2024",
+        "page": 1,
+        "bbox": [
+         494.0,
+         242.0,
+         593.0,
+         260.0
+        ]
+       },
+       "provider_name": {
+        "value": "Riverside Physiotherapy Clinic",
+        "evidence_text": "Riverside Physiotherapy Clinic",
+        "page": 1,
+        "bbox": [
+         44.0,
+         369.0,
+         288.0,
+         389.0
+        ]
+       },
+       "incident_type": {
+        "value": "Emergency room visit",
+        "evidence_text": "Emergency room visit",
+        "page": 1,
+        "bbox": [
+         44.0,
+         309.0,
+         217.0,
+         328.0
+        ]
+       },
+       "total_amount": {
+        "value": "7,268.87",
+        "evidence_text": "CAD 7,268.87",
+        "page": 1,
+        "bbox": [
+         515.0,
+         588.0,
+         653.0,
+         610.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "Baseline (prompt only)",
+      "latency_ms": 26789.7,
+      "audit": {
+       "record_hash": "ee82d6718f73d07004692aa1d24d4522c1c8b45ca937b69c1be71ab8136f8310",
+       "prev_hash": "2c8e4cf09a5838a3a3cd7881060bb69c964532cd792ac8db0a13c5d4b466f9c9"
+      }
+     },
+     "raw_output": "```json\n{\n  \"claim_number\": {\"value\": \"C-45460447\", \"evidence_text\": \"C-45460447\", \"page\": 1, \"bbox\": [48, 238, 142, 263]},\n  \"policy_number\": {\"value\": \"POL-411-5831-B\", \"evidence_text\": \"POL-411-5831-B\", \"page\": 1, \"bbox\": [494, 178, 628, 200]},\n  \"claimant_name\": {\"value\": \"Imran Khan\", \"evidence_text\": \"Imran Khan\", \"page\": 1, \"bbox\": [44, 184, 135, 204]},\n  \"date_of_loss\": {\"value\": \"2024-02-01\", \"evidence_text\": \"01 Feb 2024\", \"page\": 1, \"bbox\": [494, 242, 593, 260]},\n  \"provider_name\": {\"value\": \"Riverside Physiotherapy Clinic\", \"evidence_text\": \"Riverside Physiotherapy Clinic\", \"page\": 1, \"bbox\": [44, 369, 288, 389]},\n  \"incident_type\": {\"value\": \"Emergency room visit\", \"evidence_text\": \"Emergency room visit\", \"page\": 1, \"bbox\": [44, 309, 217, 328]},\n  \"total_amount\": {\"value\": \"7,268.87\", \"evidence_text\": \"CAD 7,268.87\", \"page\": 1, \"bbox\": [515, 588, 653, 610]}\n}\n```",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 1.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.517
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.614
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.693
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.765
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.845
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.927
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.83
+       }
+      }
+     }
+    },
+    "sft_v2": {
+     "response": {
+      "request_id": "sft_v2ctrl_v2_greedy_holdout/holdout-00068",
+      "fields": {
+       "claim_number": {
+        "value": "C-45460447",
+        "evidence_text": "C-45460447",
+        "page": 1,
+        "bbox": [
+         45.0,
+         250.0,
+         143.0,
+         262.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-411-5831-B",
+        "evidence_text": "POL-411-5831-B",
+        "page": 1,
+        "bbox": [
+         495.0,
+         180.0,
+         630.0,
+         196.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Imran Khan",
+        "evidence_text": "Imran Khan",
+        "page": 1,
+        "bbox": [
+         45.0,
+         187.0,
+         137.0,
+         202.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2024-02-01",
+        "evidence_text": "01 Feb 2024",
+        "page": 1,
+        "bbox": [
+         496.0,
+         242.0,
+         596.0,
+         258.0
+        ]
+       },
+       "provider_name": {
+        "value": "Riverside Physiotherapy Clinic",
+        "evidence_text": "Riverside Physiotherapy Clinic",
+        "page": 1,
+        "bbox": [
+         46.0,
+         371.0,
+         290.0,
+         388.0
+        ]
+       },
+       "incident_type": {
+        "value": "Emergency room visit",
+        "evidence_text": "Emergency room visit",
+        "page": 1,
+        "bbox": [
+         46.0,
+         310.0,
+         219.0,
+         326.0
+        ]
+       },
+       "total_amount": {
+        "value": "7268.87",
+        "evidence_text": "CAD 7,268.87",
+        "page": 1,
+        "bbox": [
+         516.0,
+         591.0,
+         655.0,
+         612.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "SFT v2",
+      "latency_ms": 26039.5,
+      "audit": {
+       "record_hash": "c3b776ac4acc1ac4d7e4bf2137b0566f8f3cf733bc9e152f9ab713061aa845d8",
+       "prev_hash": "534cfc7a82dd2cf27f23f6eff79728d84119f084dc24d7875972b19748398308"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"C-45460447\", \"evidence_text\": \"C-45460447\", \"page\": 1, \"bbox\": [45, 250, 143, 262]},\n  \"policy_number\": {\"value\": \"POL-411-5831-B\", \"evidence_text\": \"POL-411-5831-B\", \"page\": 1, \"bbox\": [495, 180, 630, 196]},\n  \"claimant_name\": {\"value\": \"Imran Khan\", \"evidence_text\": \"Imran Khan\", \"page\": 1, \"bbox\": [45, 187, 137, 202]},\n  \"date_of_loss\": {\"value\": \"2024-02-01\", \"evidence_text\": \"01 Feb 2024\", \"page\": 1, \"bbox\": [496, 242, 596, 258]},\n  \"provider_name\": {\"value\": \"Riverside Physiotherapy Clinic\", \"evidence_text\": \"Riverside Physiotherapy Clinic\", \"page\": 1, \"bbox\": [46, 371, 290, 388]},\n  \"incident_type\": {\"value\": \"Emergency room visit\", \"evidence_text\": \"Emergency room visit\", \"page\": 1, \"bbox\": [46, 310, 219, 326]},\n  \"total_amount\": {\"value\": \"7268.87\", \"evidence_text\": \"CAD 7,268.87\", \"page\": 1, \"bbox\": [516, 591, 655, 612]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+sft_v2ctrl@502bdd24f7921290",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 1.0,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.889
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.85
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.862
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.884
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.848
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.832
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.929
+       }
+      }
+     }
+    },
+    "grpo": {
+     "response": {
+      "request_id": "grpo_v1_v2_greedy_holdout/holdout-00068",
+      "fields": {
+       "claim_number": null,
+       "policy_number": {
+        "value": "POL-411-5831-B",
+        "evidence_text": "POL-411-5831-B",
+        "page": 1,
+        "bbox": [
+         495.0,
+         181.0,
+         630.0,
+         196.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Imran Khan",
+        "evidence_text": "Imran Khan",
+        "page": 1,
+        "bbox": [
+         45.0,
+         186.0,
+         137.0,
+         202.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2024-02-01",
+        "evidence_text": "01 Feb 2024",
+        "page": 1,
+        "bbox": [
+         496.0,
+         242.0,
+         596.0,
+         258.0
+        ]
+       },
+       "provider_name": {
+        "value": "Riverside Physiotherapy Clinic",
+        "evidence_text": "Riverside Physiotherapy Clinic",
+        "page": 1,
+        "bbox": [
+         46.0,
+         370.0,
+         290.0,
+         388.0
+        ]
+       },
+       "incident_type": {
+        "value": "Emergency room visit",
+        "evidence_text": "Emergency room visit",
+        "page": 1,
+        "bbox": [
+         46.0,
+         309.0,
+         219.0,
+         326.0
+        ]
+       },
+       "total_amount": {
+        "value": "7268.87",
+        "evidence_text": "CAD 7,268.87",
+        "page": 1,
+        "bbox": [
+         516.0,
+         590.0,
+         655.0,
+         611.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "GRPO",
+      "latency_ms": 23524.5,
+      "audit": {
+       "record_hash": "fa0d5e2f8a27b847285b74b5752bddf63897f798c5f0516ff6af6aa9cbfe4931",
+       "prev_hash": "88d76253ee44990ba90c8323c2338fd9fa045114ae3f055d36e39587cf608473"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": null,\n  \"policy_number\": {\"value\": \"POL-411-5831-B\", \"evidence_text\": \"POL-411-5831-B\", \"page\": 1, \"bbox\": [495, 181, 630, 196]},\n  \"claimant_name\": {\"value\": \"Imran Khan\", \"evidence_text\": \"Imran Khan\", \"page\": 1, \"bbox\": [45, 186, 137, 202]},\n  \"date_of_loss\": {\"value\": \"2024-02-01\", \"evidence_text\": \"01 Feb 2024\", \"page\": 1, \"bbox\": [496, 242, 596, 258]},\n  \"provider_name\": {\"value\": \"Riverside Physiotherapy Clinic\", \"evidence_text\": \"Riverside Physiotherapy Clinic\", \"page\": 1, \"bbox\": [46, 370, 290, 388]},\n  \"incident_type\": {\"value\": \"Emergency room visit\", \"evidence_text\": \"Emergency room visit\", \"page\": 1, \"bbox\": [46, 309, 219, 326]},\n  \"total_amount\": {\"value\": \"7268.87\", \"evidence_text\": \"CAD 7,268.87\", \"page\": 1, \"bbox\": [516, 590, 655, 611]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+grpo_v1@7c67a0ea535bac43",
+     "scores": {
+      "field_accuracy": 0.8571,
+      "grounded_accuracy": 0.8571,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "missed",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.907
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.877
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.884
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.851
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.846
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.938
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "doc_id": "holdout-00015",
+   "split": "holdout",
+   "doc_type": "invoice_b",
+   "note": "Unseen invoice with no claim number: every model copies the account number into it, so the null behaviour learned in training did not transfer. It is flagged only because the date was cited from a line item.",
+   "image": "replay/images/holdout-00015.jpg",
+   "width": 980,
+   "height": 1260,
+   "gold": {
+    "claim_number": null,
+    "policy_number": null,
+    "claimant_name": {
+     "value": "Jos\u00e9 L\u00f3pez",
+     "evidence_text": "Jos\u00e9 L\u00f3pez",
+     "page": 1,
+     "bbox": [
+      62.7,
+      182.3,
+      154.8,
+      200.9
+     ]
+    },
+    "date_of_loss": {
+     "value": "2025-09-04",
+     "evidence_text": "September 04, 2025",
+     "page": 1,
+     "bbox": [
+      742.5,
+      215.6,
+      878.6,
+      230.4
+     ]
+    },
+    "provider_name": {
+     "value": "Bayview Family Health",
+     "evidence_text": "Bayview Family Health",
+     "page": 1,
+     "bbox": [
+      563.5,
+      54.5,
+      779.6,
+      74.8
+     ]
+    },
+    "incident_type": null,
+    "total_amount": {
+     "value": "1199.56",
+     "evidence_text": "CAD 1,199.56",
+     "page": 1,
+     "bbox": [
+      790.2,
+      577.9,
+      910.3,
+      594.6
+     ]
+    }
+   },
+   "predictions": {
+    "baseline": {
+     "response": {
+      "request_id": "baseline_v2_greedy_holdout/holdout-00015",
+      "fields": {
+       "claim_number": {
+        "value": "INV-6668",
+        "evidence_text": "INV-6668",
+        "page": 1,
+        "bbox": [
+         630.0,
+         160.0,
+         700.0,
+         178.0
+        ]
+       },
+       "policy_number": null,
+       "claimant_name": {
+        "value": "Jos\u00e9 L\u00f3pez",
+        "evidence_text": "Jos\u00e9 L\u00f3pez",
+        "page": 1,
+        "bbox": [
+         63.0,
+         182.0,
+         153.0,
+         200.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-09-04",
+        "evidence_text": "09/04",
+        "page": 1,
+        "bbox": [
+         54.0,
+         320.0,
+         86.0,
+         333.0
+        ]
+       },
+       "provider_name": {
+        "value": "Bayview Family Health",
+        "evidence_text": "Bayview Family Health",
+        "page": 1,
+        "bbox": [
+         563.0,
+         54.0,
+         777.0,
+         73.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "1,199.56",
+        "evidence_text": "CAD 1,199.56",
+        "page": 1,
+        "bbox": [
+         800.0,
+         688.0,
+         909.0,
+         707.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": true,
+       "reasons": [
+        "date_of_loss: value does not match its own evidence text"
+       ]
+      },
+      "model": "Baseline (prompt only)",
+      "latency_ms": 19739.9,
+      "audit": {
+       "record_hash": "baac5b8b86a153143fdd2ec51d3a97cd4ed25a0fbfae6fd7bbc6c902e8b03986",
+       "prev_hash": "8d02f864c4114176018bf328aa751716d7c9c259097128baec37cc67be22f300"
+      }
+     },
+     "raw_output": "```json\n{\n  \"claim_number\": {\"value\": \"INV-6668\", \"evidence_text\": \"INV-6668\", \"page\": 1, \"bbox\": [630, 160, 700, 178]},\n  \"policy_number\": null,\n  \"claimant_name\": {\"value\": \"Jos\u00e9 L\u00f3pez\", \"evidence_text\": \"Jos\u00e9 L\u00f3pez\", \"page\": 1, \"bbox\": [63, 182, 153, 200]},\n  \"date_of_loss\": {\"value\": \"2025-09-04\", \"evidence_text\": \"09/04\", \"page\": 1, \"bbox\": [54, 320, 86, 333]},\n  \"provider_name\": {\"value\": \"Bayview Family Health\", \"evidence_text\": \"Bayview Family Health\", \"page\": 1, \"bbox\": [563, 54, 777, 73]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"1,199.56\", \"evidence_text\": \"CAD 1,199.56\", \"page\": 1, \"bbox\": [800, 688, 909, 707]}}\n```",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+     "scores": {
+      "field_accuracy": 0.8571,
+      "grounded_accuracy": 0.5,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "hallucinated",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.915
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.877
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       }
+      }
+     }
+    },
+    "sft_v2": {
+     "response": {
+      "request_id": "sft_v2ctrl_v2_greedy_holdout/holdout-00015",
+      "fields": {
+       "claim_number": {
+        "value": "INV-6638",
+        "evidence_text": "INV-6638",
+        "page": 1,
+        "bbox": [
+         744.0,
+         165.0,
+         814.0,
+         176.0
+        ]
+       },
+       "policy_number": {
+        "value": "CAD 615.36",
+        "evidence_text": "CAD 615.36",
+        "page": 1,
+        "bbox": [
+         782.0,
+         357.0,
+         862.0,
+         368.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Jos\u00e9 L\u00f3pez",
+        "evidence_text": "Jos\u00e9 L\u00f3pez",
+        "page": 1,
+        "bbox": [
+         62.0,
+         184.0,
+         155.0,
+         198.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-09-04",
+        "evidence_text": "09/04",
+        "page": 1,
+        "bbox": [
+         54.0,
+         324.0,
+         88.0,
+         334.0
+        ]
+       },
+       "provider_name": {
+        "value": "Bayview Family Health",
+        "evidence_text": "Bayview Family Health",
+        "page": 1,
+        "bbox": [
+         564.0,
+         55.0,
+         779.0,
+         74.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "1199.56",
+        "evidence_text": "CAD 1,199.56",
+        "page": 1,
+        "bbox": [
+         791.0,
+         578.0,
+         911.0,
+         595.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": true,
+       "reasons": [
+        "date_of_loss: value does not match its own evidence text"
+       ]
+      },
+      "model": "SFT v2",
+      "latency_ms": 22101.8,
+      "audit": {
+       "record_hash": "2418dcffc9d0a9419a1cdd8a7c75adb0c41400dba38412655466dbae4a5d815b",
+       "prev_hash": "785105be662d57b090b1728242a39721549635169fb98b8e583ceb95e4d54377"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"INV-6638\", \"evidence_text\": \"INV-6638\", \"page\": 1, \"bbox\": [744, 165, 814, 176]},\n  \"policy_number\": {\"value\": \"CAD 615.36\", \"evidence_text\": \"CAD 615.36\", \"page\": 1, \"bbox\": [782, 357, 862, 368]},\n  \"claimant_name\": {\"value\": \"Jos\u00e9 L\u00f3pez\", \"evidence_text\": \"Jos\u00e9 L\u00f3pez\", \"page\": 1, \"bbox\": [62, 184, 155, 198]},\n  \"date_of_loss\": {\"value\": \"2025-09-04\", \"evidence_text\": \"09/04\", \"page\": 1, \"bbox\": [54, 324, 88, 334]},\n  \"provider_name\": {\"value\": \"Bayview Family Health\", \"evidence_text\": \"Bayview Family Health\", \"page\": 1, \"bbox\": [564, 55, 779, 74]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"1199.56\", \"evidence_text\": \"CAD 1,199.56\", \"page\": 1, \"bbox\": [791, 578, 911, 595]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+sft_v2ctrl@502bdd24f7921290",
+     "scores": {
+      "field_accuracy": 0.7143,
+      "grounded_accuracy": 0.75,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "hallucinated",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "distractor_for_absent",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.747
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.931
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.959
+       }
+      }
+     }
+    },
+    "grpo": {
+     "response": {
+      "request_id": "grpo_v1_v2_greedy_holdout/holdout-00015",
+      "fields": {
+       "claim_number": {
+        "value": "INV-6638",
+        "evidence_text": "INV-6638",
+        "page": 1,
+        "bbox": [
+         744.0,
+         164.0,
+         814.0,
+         176.0
+        ]
+       },
+       "policy_number": null,
+       "claimant_name": {
+        "value": "Jos\u00e9 L\u00f3pez",
+        "evidence_text": "Jos\u00e9 L\u00f3pez",
+        "page": 1,
+        "bbox": [
+         62.0,
+         183.0,
+         155.0,
+         200.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-09-04",
+        "evidence_text": "09/04",
+        "page": 1,
+        "bbox": [
+         54.0,
+         322.0,
+         88.0,
+         333.0
+        ]
+       },
+       "provider_name": {
+        "value": "Bayview Family Health",
+        "evidence_text": "Bayview Family Health",
+        "page": 1,
+        "bbox": [
+         564.0,
+         54.0,
+         779.0,
+         74.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "1199.56",
+        "evidence_text": "CAD 1,199.56",
+        "page": 1,
+        "bbox": [
+         791.0,
+         578.0,
+         911.0,
+         595.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": true,
+       "reasons": [
+        "date_of_loss: value does not match its own evidence text"
+       ]
+      },
+      "model": "GRPO",
+      "latency_ms": 19730.5,
+      "audit": {
+       "record_hash": "d38bf2e5b7a132b7a59f9386d1aab243ff3de85f616226eded701c3ac9a5b956",
+       "prev_hash": "05398f404fee5f90c18b2dac68a561b53e4b856c4a82a9f36efc1f5f86f54bb6"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"INV-6638\", \"evidence_text\": \"INV-6638\", \"page\": 1, \"bbox\": [744, 164, 814, 176]},\n  \"policy_number\": null,\n  \"claimant_name\": {\"value\": \"Jos\u00e9 L\u00f3pez\", \"evidence_text\": \"Jos\u00e9 L\u00f3pez\", \"page\": 1, \"bbox\": [62, 183, 155, 200]},\n  \"date_of_loss\": {\"value\": \"2025-09-04\", \"evidence_text\": \"09/04\", \"page\": 1, \"bbox\": [54, 322, 88, 333]},\n  \"provider_name\": {\"value\": \"Bayview Family Health\", \"evidence_text\": \"Bayview Family Health\", \"page\": 1, \"bbox\": [564, 54, 779, 74]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"1199.56\", \"evidence_text\": \"CAD 1,199.56\", \"page\": 1, \"bbox\": [791, 578, 911, 595]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+grpo_v1@7c67a0ea535bac43",
+     "scores": {
+      "field_accuracy": 0.8571,
+      "grounded_accuracy": 0.75,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "hallucinated",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.906
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.933
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.959
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "doc_id": "holdout-00046",
+   "split": "holdout",
+   "doc_type": "claim_form_b",
+   "note": "Accented name: the diacritic is dropped even after fine-tuning.",
+   "image": "replay/images/holdout-00046.jpg",
+   "width": 980,
+   "height": 1260,
+   "gold": {
+    "claim_number": {
+     "value": "CLM-2025-538768",
+     "evidence_text": "CLM-2025-538768",
+     "page": 1,
+     "bbox": [
+      42.3,
+      250.9,
+      192.5,
+      266.0
+     ]
+    },
+    "policy_number": {
+     "value": "POL-686-0468-G",
+     "evidence_text": "POL-686-0468-G",
+     "page": 1,
+     "bbox": [
+      490.9,
+      180.1,
+      629.2,
+      194.9
+     ]
+    },
+    "claimant_name": {
+     "value": "Alejandro Garc\u00eda",
+     "evidence_text": "Alejandro Garc\u00eda",
+     "page": 1,
+     "bbox": [
+      41.0,
+      187.2,
+      177.3,
+      208.0
+     ]
+    },
+    "date_of_loss": {
+     "value": "2025-11-17",
+     "evidence_text": "November 17, 2025",
+     "page": 1,
+     "bbox": [
+      492.2,
+      240.7,
+      650.5,
+      258.9
+     ]
+    },
+    "provider_name": {
+     "value": "Crestview Medical Centre",
+     "evidence_text": "Crestview Medical Centre",
+     "page": 1,
+     "bbox": [
+      44.8,
+      372.8,
+      250.0,
+      390.0
+     ]
+    },
+    "incident_type": {
+     "value": "Emergency room visit",
+     "evidence_text": "Emergency room visit",
+     "page": 1,
+     "bbox": [
+      43.5,
+      311.5,
+      216.8,
+      332.0
+     ]
+    },
+    "total_amount": {
+     "value": "6058.23",
+     "evidence_text": "CAD 6,058.23",
+     "page": 1,
+     "bbox": [
+      515.2,
+      589.7,
+      654.6,
+      610.5
+     ]
+    }
+   },
+   "predictions": {
+    "baseline": {
+     "response": {
+      "request_id": "baseline_v2_greedy_holdout/holdout-00046",
+      "fields": {
+       "claim_number": {
+        "value": "CLM-2025-538768",
+        "evidence_text": "CLM-2025-538768",
+        "page": 1,
+        "bbox": [
+         212.0,
+         242.0,
+         303.0,
+         264.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-686-0468-G",
+        "evidence_text": "POL-686-0468-G",
+        "page": 1,
+        "bbox": [
+         212.0,
+         174.0,
+         303.0,
+         196.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Alejandro Garcia",
+        "evidence_text": "Alejandro Garcia",
+        "page": 1,
+        "bbox": [
+         248.0,
+         188.0,
+         340.0,
+         209.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "1974-11-03",
+        "evidence_text": "November 03, 1974",
+        "page": 1,
+        "bbox": [
+         212.0,
+         302.0,
+         303.0,
+         324.0
+        ]
+       },
+       "provider_name": {
+        "value": "Crestview Medical Centre",
+        "evidence_text": "Crestview Medical Centre",
+        "page": 1,
+        "bbox": [
+         212.0,
+         368.0,
+         303.0,
+         389.0
+        ]
+       },
+       "incident_type": {
+        "value": "Emergency room visit",
+        "evidence_text": "Emergency room visit",
+        "page": 1,
+        "bbox": [
+         212.0,
+         284.0,
+         303.0,
+         305.0
+        ]
+       },
+       "total_amount": {
+        "value": "6,058.23",
+        "evidence_text": "CAD 6,058.23",
+        "page": 1,
+        "bbox": [
+         212.0,
+         590.0,
+         303.0,
+         612.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "Baseline (prompt only)",
+      "latency_ms": 27497.6,
+      "audit": {
+       "record_hash": "48553116dba99048535effe8e256c2d894e23842b993ef5f8503e8254e0831f7",
+       "prev_hash": "a5f6c475c84853d1a2fa4ebf7c9decc358bf76f2b4c8e4f90463380d7b8839ab"
+      }
+     },
+     "raw_output": "```json\n{\n  \"claim_number\": {\"value\": \"CLM-2025-538768\", \"evidence_text\": \"CLM-2025-538768\", \"page\": 1, \"bbox\": [212, 242, 303, 264]},\n  \"policy_number\": {\"value\": \"POL-686-0468-G\", \"evidence_text\": \"POL-686-0468-G\", \"page\": 1, \"bbox\": [212, 174, 303, 196]},\n  \"claimant_name\": {\"value\": \"Alejandro Garcia\", \"evidence_text\": \"Alejandro Garcia\", \"page\": 1, \"bbox\": [248, 188, 340, 209]},\n  \"date_of_loss\": {\"value\": \"1974-11-03\", \"evidence_text\": \"November 03, 1974\", \"page\": 1, \"bbox\": [212, 302, 303, 324]},\n  \"provider_name\": {\"value\": \"Crestview Medical Centre\", \"evidence_text\": \"Crestview Medical Centre\", \"page\": 1, \"bbox\": [212, 368, 303, 389]},\n  \"incident_type\": {\"value\": \"Emergency room visit\", \"evidence_text\": \"Emergency room visit\", \"page\": 1, \"bbox\": [212, 284, 303, 305]},\n  \"total_amount\": {\"value\": \"6,058.23\", \"evidence_text\": \"CAD 6,058.23\", \"page\": 1, \"bbox\": [212, 590, 303, 612]}\n}\n```",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+     "scores": {
+      "field_accuracy": 0.7143,
+      "grounded_accuracy": 0.0,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "diacritics",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "date_of_loss": {
+        "error_type": "distractor_confusion",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.128
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       }
+      }
+     }
+    },
+    "sft_v2": {
+     "response": {
+      "request_id": "sft_v2ctrl_v2_greedy_holdout/holdout-00046",
+      "fields": {
+       "claim_number": {
+        "value": "CLM-2025-538768",
+        "evidence_text": "CLM-2025-538768",
+        "page": 1,
+        "bbox": [
+         44.0,
+         252.0,
+         193.0,
+         264.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-686-0468-G",
+        "evidence_text": "POL-686-0468-G",
+        "page": 1,
+        "bbox": [
+         492.0,
+         180.0,
+         628.0,
+         194.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Alejandro Garcia",
+        "evidence_text": "Alejandro Garcia",
+        "page": 1,
+        "bbox": [
+         42.0,
+         188.0,
+         176.0,
+         206.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-11-17",
+        "evidence_text": "November 17, 2025",
+        "page": 1,
+        "bbox": [
+         493.0,
+         242.0,
+         651.0,
+         258.0
+        ]
+       },
+       "provider_name": {
+        "value": "Crestview Medical Centre",
+        "evidence_text": "Crestview Medical Centre",
+        "page": 1,
+        "bbox": [
+         44.0,
+         373.0,
+         250.0,
+         389.0
+        ]
+       },
+       "incident_type": {
+        "value": "Emergency room visit",
+        "evidence_text": "Emergency room visit",
+        "page": 1,
+        "bbox": [
+         44.0,
+         313.0,
+         216.0,
+         330.0
+        ]
+       },
+       "total_amount": {
+        "value": "6058.23",
+        "evidence_text": "CAD 6,058.23",
+        "page": 1,
+        "bbox": [
+         515.0,
+         590.0,
+         656.0,
+         612.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "SFT v2",
+      "latency_ms": 26444.0,
+      "audit": {
+       "record_hash": "9f20a7572fdc913ebc60a457f3b8307e004f12ec1677f94e9c0568b73bf938c4",
+       "prev_hash": "64d9b36d53eded33a84b7098ba94d389d7d281f633b6e6df558000337bc730c2"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"CLM-2025-538768\", \"evidence_text\": \"CLM-2025-538768\", \"page\": 1, \"bbox\": [44, 252, 193, 264]},\n  \"policy_number\": {\"value\": \"POL-686-0468-G\", \"evidence_text\": \"POL-686-0468-G\", \"page\": 1, \"bbox\": [492, 180, 628, 194]},\n  \"claimant_name\": {\"value\": \"Alejandro Garcia\", \"evidence_text\": \"Alejandro Garcia\", \"page\": 1, \"bbox\": [42, 188, 176, 206]},\n  \"date_of_loss\": {\"value\": \"2025-11-17\", \"evidence_text\": \"November 17, 2025\", \"page\": 1, \"bbox\": [493, 242, 651, 258]},\n  \"provider_name\": {\"value\": \"Crestview Medical Centre\", \"evidence_text\": \"Crestview Medical Centre\", \"page\": 1, \"bbox\": [44, 373, 250, 389]},\n  \"incident_type\": {\"value\": \"Emergency room visit\", \"evidence_text\": \"Emergency room visit\", \"page\": 1, \"bbox\": [44, 313, 216, 330]},\n  \"total_amount\": {\"value\": \"6058.23\", \"evidence_text\": \"CAD 6,058.23\", \"page\": 1, \"bbox\": [515, 590, 656, 612]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+sft_v2ctrl@502bdd24f7921290",
+     "scores": {
+      "field_accuracy": 0.8571,
+      "grounded_accuracy": 0.8571,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.784
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.917
+       },
+       "claimant_name": {
+        "error_type": "diacritics",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.851
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.872
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.927
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.823
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.909
+       }
+      }
+     }
+    },
+    "grpo": {
+     "response": {
+      "request_id": "grpo_v1_v2_greedy_holdout/holdout-00046",
+      "fields": {
+       "claim_number": {
+        "value": "CLM-2025-538768",
+        "evidence_text": "CLM-2025-538768",
+        "page": 1,
+        "bbox": [
+         43.0,
+         251.0,
+         193.0,
+         264.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-686-0468-G",
+        "evidence_text": "POL-686-0468-G",
+        "page": 1,
+        "bbox": [
+         491.0,
+         180.0,
+         628.0,
+         194.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Alejandro Garcia",
+        "evidence_text": "Alejandro Garcia",
+        "page": 1,
+        "bbox": [
+         41.0,
+         188.0,
+         177.0,
+         206.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-11-17",
+        "evidence_text": "November 17, 2025",
+        "page": 1,
+        "bbox": [
+         492.0,
+         241.0,
+         652.0,
+         258.0
+        ]
+       },
+       "provider_name": {
+        "value": "Crestview Medical Centre",
+        "evidence_text": "Crestview Medical Centre",
+        "page": 1,
+        "bbox": [
+         43.0,
+         372.0,
+         250.0,
+         389.0
+        ]
+       },
+       "incident_type": {
+        "value": "Emergency room visit",
+        "evidence_text": "Emergency room visit",
+        "page": 1,
+        "bbox": [
+         43.0,
+         312.0,
+         216.0,
+         330.0
+        ]
+       },
+       "total_amount": {
+        "value": "6058.23",
+        "evidence_text": "CAD 6,058.23",
+        "page": 1,
+        "bbox": [
+         515.0,
+         589.0,
+         656.0,
+         612.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": false,
+       "reasons": []
+      },
+      "model": "GRPO",
+      "latency_ms": 27268.7,
+      "audit": {
+       "record_hash": "ea5a8625250ca1b596811c306db86893736023b246d0e2a1d90c1e59d7901b6e",
+       "prev_hash": "be9e009e2a5c3596f888d38f98868559dfcca2cbd05190ce14e58ce364d784d6"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"CLM-2025-538768\", \"evidence_text\": \"CLM-2025-538768\", \"page\": 1, \"bbox\": [43, 251, 193, 264]},\n  \"policy_number\": {\"value\": \"POL-686-0468-G\", \"evidence_text\": \"POL-686-0468-G\", \"page\": 1, \"bbox\": [491, 180, 628, 194]},\n  \"claimant_name\": {\"value\": \"Alejandro Garcia\", \"evidence_text\": \"Alejandro Garcia\", \"page\": 1, \"bbox\": [41, 188, 177, 206]},\n  \"date_of_loss\": {\"value\": \"2025-11-17\", \"evidence_text\": \"November 17, 2025\", \"page\": 1, \"bbox\": [492, 241, 652, 258]},\n  \"provider_name\": {\"value\": \"Crestview Medical Centre\", \"evidence_text\": \"Crestview Medical Centre\", \"page\": 1, \"bbox\": [43, 372, 250, 389]},\n  \"incident_type\": {\"value\": \"Emergency room visit\", \"evidence_text\": \"Emergency room visit\", \"page\": 1, \"bbox\": [43, 312, 216, 330]},\n  \"total_amount\": {\"value\": \"6058.23\", \"evidence_text\": \"CAD 6,058.23\", \"page\": 1, \"bbox\": [515, 589, 656, 612]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+grpo_v1@7c67a0ea535bac43",
+     "scores": {
+      "field_accuracy": 0.8571,
+      "grounded_accuracy": 0.8571,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.854
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.924
+       },
+       "claimant_name": {
+        "error_type": "diacritics",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.863
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.925
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.893
+       },
+       "incident_type": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.872
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.894
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "doc_id": "holdout-00075",
+   "split": "holdout",
+   "doc_type": "invoice_b",
+   "note": "SFT v2 swaps claim and policy numbers on an unseen layout; GRPO avoids it.",
+   "image": "replay/images/holdout-00075.jpg",
+   "width": 980,
+   "height": 1260,
+   "gold": {
+    "claim_number": {
+     "value": "CLM-2025-521627",
+     "evidence_text": "CLM-2025-521627",
+     "page": 1,
+     "bbox": [
+      740,
+      241,
+      865,
+      251
+     ]
+    },
+    "policy_number": {
+     "value": "POL-525-9435-H",
+     "evidence_text": "POL-525-9435-H",
+     "page": 1,
+     "bbox": [
+      740,
+      267,
+      854,
+      277
+     ]
+    },
+    "claimant_name": {
+     "value": "Neha Sharma",
+     "evidence_text": "Neha Sharma",
+     "page": 1,
+     "bbox": [
+      60,
+      186,
+      172,
+      199
+     ]
+    },
+    "date_of_loss": {
+     "value": "2025-06-26",
+     "evidence_text": "26 Jun 2025",
+     "page": 1,
+     "bbox": [
+      740,
+      215,
+      823,
+      225
+     ]
+    },
+    "provider_name": {
+     "value": "Northern Lights Dental",
+     "evidence_text": "Northern Lights Dental",
+     "page": 1,
+     "bbox": [
+      560,
+      54,
+      777,
+      73
+     ]
+    },
+    "incident_type": null,
+    "total_amount": {
+     "value": "910.40",
+     "evidence_text": "$910.40",
+     "page": 1,
+     "bbox": [
+      790,
+      565,
+      859,
+      580
+     ]
+    }
+   },
+   "predictions": {
+    "baseline": {
+     "response": {
+      "request_id": "baseline_v2_greedy_holdout/holdout-00075",
+      "fields": {
+       "claim_number": {
+        "value": "CLM-2025-521627",
+        "evidence_text": "CLM-2025-521627",
+        "page": 1,
+        "bbox": [
+         740.0,
+         239.0,
+         863.0,
+         259.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-525-9435-H",
+        "evidence_text": "POL-525-9435-H",
+        "page": 1,
+        "bbox": [
+         740.0,
+         264.0,
+         851.0,
+         280.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Neha Sharma",
+        "evidence_text": "Neha Sharma",
+        "page": 1,
+        "bbox": [
+         60.0,
+         184.0,
+         168.0,
+         204.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-06-26",
+        "evidence_text": "06/26",
+        "page": 1,
+        "bbox": [
+         53.0,
+         369.0,
+         84.0,
+         386.0
+        ]
+       },
+       "provider_name": {
+        "value": "Northern Lights Dental",
+        "evidence_text": "Northern Lights Dental",
+        "page": 1,
+        "bbox": [
+         560.0,
+         53.0,
+         773.0,
+         72.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "910.40",
+        "evidence_text": "$910.40",
+        "page": 1,
+        "bbox": [
+         789.0,
+         564.0,
+         855.0,
+         580.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": true,
+       "reasons": [
+        "date_of_loss: value does not match its own evidence text"
+       ]
+      },
+      "model": "Baseline (prompt only)",
+      "latency_ms": 23751.4,
+      "audit": {
+       "record_hash": "cef849a898f136519f8e9c8d38aa5979a52499f83e07647d933f1397f378c899",
+       "prev_hash": "69b91424e6c16cd7323aa09905af842c72b182f729baac78adc0e58c7ad4d40e"
+      }
+     },
+     "raw_output": "```json\n{\n  \"claim_number\": {\"value\": \"CLM-2025-521627\", \"evidence_text\": \"CLM-2025-521627\", \"page\": 1, \"bbox\": [740, 239, 863, 259]},\n  \"policy_number\": {\"value\": \"POL-525-9435-H\", \"evidence_text\": \"POL-525-9435-H\", \"page\": 1, \"bbox\": [740, 264, 851, 280]},\n  \"claimant_name\": {\"value\": \"Neha Sharma\", \"evidence_text\": \"Neha Sharma\", \"page\": 1, \"bbox\": [60, 184, 168, 204]},\n  \"date_of_loss\": {\"value\": \"2025-06-26\", \"evidence_text\": \"06/26\", \"page\": 1, \"bbox\": [53, 369, 84, 386]},\n  \"provider_name\": {\"value\": \"Northern Lights Dental\", \"evidence_text\": \"Northern Lights Dental\", \"page\": 1, \"bbox\": [560, 53, 773, 72]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"910.40\", \"evidence_text\": \"$910.40\", \"page\": 1, \"bbox\": [789, 564, 855, 580]}}\n```",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 0.6667,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.496
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.615
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.635
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.884
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.874
+       }
+      }
+     }
+    },
+    "sft_v2": {
+     "response": {
+      "request_id": "sft_v2ctrl_v2_greedy_holdout/holdout-00075",
+      "fields": {
+       "claim_number": {
+        "value": "POL-525-9435-H",
+        "evidence_text": "POL-525-9435-H",
+        "page": 1,
+        "bbox": [
+         740.0,
+         266.0,
+         854.0,
+         277.0
+        ]
+       },
+       "policy_number": null,
+       "claimant_name": {
+        "value": "Neha Sharma",
+        "evidence_text": "Neha Sharma",
+        "page": 1,
+        "bbox": [
+         60.0,
+         186.0,
+         171.0,
+         202.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-06-26",
+        "evidence_text": "06/26",
+        "page": 1,
+        "bbox": [
+         53.0,
+         374.0,
+         87.0,
+         385.0
+        ]
+       },
+       "provider_name": {
+        "value": "Northern Lights Dental",
+        "evidence_text": "Northern Lights Dental",
+        "page": 1,
+        "bbox": [
+         560.0,
+         54.0,
+         776.0,
+         73.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "910.40",
+        "evidence_text": "$910.40",
+        "page": 1,
+        "bbox": [
+         790.0,
+         566.0,
+         858.0,
+         580.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": true,
+       "reasons": [
+        "date_of_loss: value does not match its own evidence text"
+       ]
+      },
+      "model": "SFT v2",
+      "latency_ms": 19215.2,
+      "audit": {
+       "record_hash": "db5dbff103ac55a59922569fcd2d5555762bb8cb03af4e511435e2f116051424",
+       "prev_hash": "eb6f32144b1e4d04817f43323866800303f203fd9e290fb0fbaf7bb1d31eea45"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"POL-525-9435-H\", \"evidence_text\": \"POL-525-9435-H\", \"page\": 1, \"bbox\": [740, 266, 854, 277]},\n  \"policy_number\": null,\n  \"claimant_name\": {\"value\": \"Neha Sharma\", \"evidence_text\": \"Neha Sharma\", \"page\": 1, \"bbox\": [60, 186, 171, 202]},\n  \"date_of_loss\": {\"value\": \"2025-06-26\", \"evidence_text\": \"06/26\", \"page\": 1, \"bbox\": [53, 374, 87, 385]},\n  \"provider_name\": {\"value\": \"Northern Lights Dental\", \"evidence_text\": \"Northern Lights Dental\", \"page\": 1, \"bbox\": [560, 54, 776, 73]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"910.40\", \"evidence_text\": \"$910.40\", \"page\": 1, \"bbox\": [790, 566, 858, 580]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+sft_v2ctrl@502bdd24f7921290",
+     "scores": {
+      "field_accuracy": 0.7143,
+      "grounded_accuracy": 0.5,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "field_swap",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "missed",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.807
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.995
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.92
+       }
+      }
+     }
+    },
+    "grpo": {
+     "response": {
+      "request_id": "grpo_v1_v2_greedy_holdout/holdout-00075",
+      "fields": {
+       "claim_number": {
+        "value": "CLM-2025-521627",
+        "evidence_text": "CLM-2025-521627",
+        "page": 1,
+        "bbox": [
+         741.0,
+         241.0,
+         865.0,
+         253.0
+        ]
+       },
+       "policy_number": {
+        "value": "POL-525-9435-H",
+        "evidence_text": "POL-525-9435-H",
+        "page": 1,
+        "bbox": [
+         740.0,
+         266.0,
+         854.0,
+         278.0
+        ]
+       },
+       "claimant_name": {
+        "value": "Neha Sharma",
+        "evidence_text": "Neha Sharma",
+        "page": 1,
+        "bbox": [
+         60.0,
+         186.0,
+         171.0,
+         204.0
+        ]
+       },
+       "date_of_loss": {
+        "value": "2025-06-26",
+        "evidence_text": "06/26",
+        "page": 1,
+        "bbox": [
+         53.0,
+         374.0,
+         87.0,
+         386.0
+        ]
+       },
+       "provider_name": {
+        "value": "Northern Lights Dental",
+        "evidence_text": "Northern Lights Dental",
+        "page": 1,
+        "bbox": [
+         560.0,
+         54.0,
+         776.0,
+         73.0
+        ]
+       },
+       "incident_type": null,
+       "total_amount": {
+        "value": "910.40",
+        "evidence_text": "$910.40",
+        "page": 1,
+        "bbox": [
+         790.0,
+         565.0,
+         858.0,
+         580.0
+        ]
+       }
+      },
+      "review": {
+       "needs_review": true,
+       "reasons": [
+        "date_of_loss: value does not match its own evidence text"
+       ]
+      },
+      "model": "GRPO",
+      "latency_ms": 23869.7,
+      "audit": {
+       "record_hash": "ff48e1833c8031af543007e6f3ade06183cdee4db5177c1fdbefeefeea379332",
+       "prev_hash": "6b99aae7c41315639a2f9a61874909b870aa4e38aea71d6cf6efbcf4e556064f"
+      }
+     },
+     "raw_output": "{\n  \"claim_number\": {\"value\": \"CLM-2025-521627\", \"evidence_text\": \"CLM-2025-521627\", \"page\": 1, \"bbox\": [741, 241, 865, 253]},\n  \"policy_number\": {\"value\": \"POL-525-9435-H\", \"evidence_text\": \"POL-525-9435-H\", \"page\": 1, \"bbox\": [740, 266, 854, 278]},\n  \"claimant_name\": {\"value\": \"Neha Sharma\", \"evidence_text\": \"Neha Sharma\", \"page\": 1, \"bbox\": [60, 186, 171, 204]},\n  \"date_of_loss\": {\"value\": \"2025-06-26\", \"evidence_text\": \"06/26\", \"page\": 1, \"bbox\": [53, 374, 87, 386]},\n  \"provider_name\": {\"value\": \"Northern Lights Dental\", \"evidence_text\": \"Northern Lights Dental\", \"page\": 1, \"bbox\": [560, 54, 776, 73]},\n  \"incident_type\": null,\n  \"total_amount\": {\"value\": \"910.40\", \"evidence_text\": \"$910.40\", \"page\": 1, \"bbox\": [790, 565, 858, 580]}\n}",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+grpo_v1@7c67a0ea535bac43",
+     "scores": {
+      "field_accuracy": 1.0,
+      "grounded_accuracy": 0.8333,
+      "all_correct": true,
+      "fields": {
+       "claim_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.828
+       },
+       "policy_number": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.833
+       },
+       "claimant_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.718
+       },
+       "date_of_loss": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.995
+       },
+       "incident_type": {
+        "error_type": "correct_null",
+        "correct": true,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "correct",
+        "correct": true,
+        "citation_ok": true,
+        "iou": 0.986
+       }
+      }
+     }
+    }
+   }
+  },
+  {
+   "doc_id": "holdout-00036",
+   "split": "holdout",
+   "doc_type": "claim_form_b",
+   "note": "Degenerate output (a run of \"!\") from every model: unparseable, so the service routes it to a human.",
+   "image": "replay/images/holdout-00036.jpg",
+   "width": 980,
+   "height": 1260,
+   "gold": {
+    "claim_number": {
+     "value": "CLM-2024-150253",
+     "evidence_text": "CLM-2024-150253",
+     "page": 1,
+     "bbox": [
+      63.7,
+      227.5,
+      219.9,
+      249.1
+     ]
+    },
+    "policy_number": {
+     "value": "NG3262624",
+     "evidence_text": "NG3262624",
+     "page": 1,
+     "bbox": [
+      515.6,
+      182.2,
+      618.1,
+      201.1
+     ]
+    },
+    "claimant_name": {
+     "value": "Arjun Patel",
+     "evidence_text": "Arjun Patel",
+     "page": 1,
+     "bbox": [
+      64.8,
+      165.2,
+      159.7,
+      187.6
+     ]
+    },
+    "date_of_loss": {
+     "value": "2024-04-06",
+     "evidence_text": "April 06, 2024",
+     "page": 1,
+     "bbox": [
+      512.3,
+      244.1,
+      634.7,
+      266.1
+     ]
+    },
+    "provider_name": {
+     "value": "Allied Home Repair",
+     "evidence_text": "Allied Home Repair",
+     "page": 1,
+     "bbox": [
+      58.2,
+      351.6,
+      223.9,
+      374.3
+     ]
+    },
+    "incident_type": {
+     "value": "Burglary",
+     "evidence_text": "Burglary",
+     "page": 1,
+     "bbox": [
+      61.4,
+      290.1,
+      132.3,
+      309.0
+     ]
+    },
+    "total_amount": {
+     "value": "19764.18",
+     "evidence_text": "CAD 19,764.18",
+     "page": 1,
+     "bbox": [
+      516.6,
+      593.4,
+      673.5,
+      619.7
+     ]
+    }
+   },
+   "predictions": {
+    "baseline": {
+     "response": {
+      "request_id": "baseline_v2_greedy_holdout/holdout-00036",
+      "fields": {
+       "claim_number": null,
+       "policy_number": null,
+       "claimant_name": null,
+       "date_of_loss": null,
+       "provider_name": null,
+       "incident_type": null,
+       "total_amount": null
+      },
+      "review": {
+       "needs_review": true,
+       "reasons": [
+        "model output could not be parsed"
+       ]
+      },
+      "model": "Baseline (prompt only)",
+      "latency_ms": 55291.6,
+      "audit": {
+       "record_hash": "4c8847889cab3bcd25b297199bc6aa58b566bc043405867c9250b6614f8373d0",
+       "prev_hash": "85cf2b25c69ac4d1ee5df146241afb7584aa73ba735527749e8f353b4d491acd"
+      }
+     },
+     "raw_output": "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3",
+     "scores": {
+      "field_accuracy": 0.0,
+      "grounded_accuracy": 0.0,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "date_of_loss": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "incident_type": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       }
+      }
+     }
+    },
+    "sft_v2": {
+     "response": {
+      "request_id": "sft_v2ctrl_v2_greedy_holdout/holdout-00036",
+      "fields": {
+       "claim_number": null,
+       "policy_number": null,
+       "claimant_name": null,
+       "date_of_loss": null,
+       "provider_name": null,
+       "incident_type": null,
+       "total_amount": null
+      },
+      "review": {
+       "needs_review": true,
+       "reasons": [
+        "model output could not be parsed"
+       ]
+      },
+      "model": "SFT v2",
+      "latency_ms": 54520.0,
+      "audit": {
+       "record_hash": "9787e2768f6cde639ff3b47d1bca07372a556ee43ab1e9a939d472f1f7b88ade",
+       "prev_hash": "d46f8104bcc1183dec0ab9347654df7135368d8dd34eb25fb7b0be5d416a4016"
+      }
+     },
+     "raw_output": "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+sft_v2ctrl@502bdd24f7921290",
+     "scores": {
+      "field_accuracy": 0.0,
+      "grounded_accuracy": 0.0,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "date_of_loss": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "incident_type": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       }
+      }
+     }
+    },
+    "grpo": {
+     "response": {
+      "request_id": "grpo_v1_v2_greedy_holdout/holdout-00036",
+      "fields": {
+       "claim_number": null,
+       "policy_number": null,
+       "claimant_name": null,
+       "date_of_loss": null,
+       "provider_name": null,
+       "incident_type": null,
+       "total_amount": null
+      },
+      "review": {
+       "needs_review": true,
+       "reasons": [
+        "model output could not be parsed"
+       ]
+      },
+      "model": "GRPO",
+      "latency_ms": 55268.3,
+      "audit": {
+       "record_hash": "6949d35bbc5876829b0846c7d7a9d0ef02ac6ebbd4541cd88c409d33735c2ba7",
+       "prev_hash": "713e4d7ce91383f4f0218dba6e78df0ec97474409d6b84fe92151be021dd4c0d"
+      }
+     },
+     "raw_output": "!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!",
+     "model_revision": "66285546d2b821cf421d4f5eb2576359d3770cd3+sft_v1@4c7f38d94a4d9794+grpo_v1@7c67a0ea535bac43",
+     "scores": {
+      "field_accuracy": 0.0,
+      "grounded_accuracy": 0.0,
+      "all_correct": false,
+      "fields": {
+       "claim_number": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "policy_number": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "claimant_name": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "date_of_loss": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "provider_name": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "incident_type": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       },
+       "total_amount": {
+        "error_type": "unparseable",
+        "correct": false,
+        "citation_ok": false,
+        "iou": 0.0
+       }
+      }
+     }
+    }
+   }
+  }
+ ]
+}

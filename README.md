@@ -14,7 +14,8 @@ questions that matter when you adapt a vision-language model for a regulated dom
 - Can every prediction be traced, re-scored and audited?
 
 > All data is synthetic. There is no real personal information anywhere.
-> **For the one-page summary, see [`PROJECT_SUMMARY.md`](PROJECT_SUMMARY.md).**
+> **Live demo: [claimlens.netlify.app](https://claimlens.netlify.app)**: real model outputs
+> with their evidence boxes, plus a client for the API. One-page summary: [`PROJECT_SUMMARY.md`](PROJECT_SUMMARY.md).
 
 ## Results at a glance
 
@@ -75,7 +76,7 @@ python -m venv .venv
 .venv\Scripts\activate                 # Windows   (macOS/Linux: source .venv/bin/activate)
 pip install -r requirements.txt -r requirements-service.txt
 
-python -m pytest -q                                       # 31 tests
+python -m pytest -q                                       # 32 tests
 python -m claimlens generate --out data                   # synthetic dataset
 python -m claimlens run --split test --run-id sim_test    # pipeline check with the simulated predictor
 # needs run outputs from the Kaggle notebooks:
@@ -98,6 +99,14 @@ docker build -t claimlens . && docker run -p 8000:8000 -v "%cd%/data:/app/data" 
 evidence text) and an **audit receipt** (the hash of its tamper-evident log record). On a laptop the service runs
 the simulated predictor. With a GPU, set `CLAIMLENS_PREDICTOR=hf` to serve the registry's production model with
 its adapter fingerprints verified at load.
+
+### Web demo (Angular)
+
+```bash
+cd web && npm install && npm start                          # http://localhost:4200 (Node 22.22.3+ or 24)
+```
+
+It replays real outputs from the Kaggle runs and can call a running service. See [`web/README.md`](web/README.md).
 
 ### Model registry and release gate
 
@@ -144,8 +153,9 @@ claimlens/
   service.py      FastAPI service with review flags and audit receipts
 notebooks/        Kaggle notebooks (see table above)
 docs/             RESULTS.md · BUILD_VS_BUY.md
-tests/            31 tests (evaluation, generator, audit, SFT/GRPO pieces, service, registry, costs)
+tests/            32 tests (evaluation, generator, audit, SFT/GRPO pieces, service, registry, costs)
 GUIDE.md          plain-language explanation of every piece and design choice
+web/              Angular demo: replay of real runs + client for POST /v1/extract
 PROJECT_SUMMARY.md  one-page summary
 Dockerfile        CPU demo image (GPU build arg documented inside)
 ```

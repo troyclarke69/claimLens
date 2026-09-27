@@ -1,0 +1,93 @@
+<section class="card connect">
+  <h2>1. Connect to a service</h2>
+  <form class="row" (submit)="$event.preventDefault(); connect()">
+    <label class="grow">
+      <span class="lbl">Service URL</span>
+      <input type="url" [value]="api.baseUrl()" (input)="api.baseUrl.set($any($event.target).value)" placeholder="http://localhost:8000" required />
+    </label>
+    <button class="btn primary" type="submit" [disabled]="conn().state === 'checking'">
+      {{ conn().state === 'checking' ? 'Checking…' : 'Connect' }}
+    </button>
+  </form>
+
+  @if (connected(); as c) {
+    <p class="status ok">
+      Connected · ClaimLens {{ c.version }} · serving <strong>{{ c.model.name }}</strong> · prompt {{ c.model.prompt_version }} ·
+      evaluator {{ c.model.evaluator_version }}
+    </p>
+    @if (simulated()) {
+      <p class="hint">
+        This service runs the <strong>simulated predictor</strong>: a test double that copies the ground truth and
+        injects known errors, so it needs the <code>doc_id</code> of a dataset document. It is not a model. For real
+        model output, see the Replay tab or run the service with <code>CLAIMLENS_PREDICTOR=hf</code> on a GPU.
+      </p>
+    }
+  } @else if (connError(); as message) {
+    <p class="status err">{{ message }}</p>
+  }
+
+  <details class="howto">
+    <summary>How to run the service</summary>
+    <pre><code>pip install -r requirements.txt -r requirements-service.txt
+python -m claimlens generate --out data          # the simulated predictor needs the dataset
+set CLAIMLENS_CORS_ORIGINS={{ origin }}   # macOS/Linux: export ...
+uvicorn claimlens.service:app --port 8000</code></pre>
+    <p>
+      Running it on your own machine? Your browser may ask whether this site can access devices on your local
+      network. Allow it for the demo to reach <code>localhost</code>.
+    </p>
+  </details>
+</section>
+
+<section class="card" [class.disabled]="conn().state !== 'ok'">
+  <h2>2. Choose a document</h2>
+  <div class="choices" role="radiogroup" aria-label="Document source">
+    <label class="choice">
+      <input type="radio" name="src" [checked]="source() === 'sample'" (change)="source.set('sample')" />
+      A sample document
+    </label>
+    <label class="choice">
+      <input type="radio" name="src" [checked]="source() === 'upload'" (change)="source.set('upload')" />
+      Upload an image
+    </label>
+  </div>
+
+  @if (source() === 'sample') {
+    <label>
+      <span class="lbl">Sample</span>
+      <select (change)="sampleId.set($any($event.target).value)">
+        @for (s of samples(); track s.doc_id) {
+          <option [value]="s.doc_id" [selected]="s.doc_id === sampleId()">{{ s.doc_id }} · {{ s.doc_type.startsWith('invoice') ? 'invoice' : 'claim form' }}{{ s.split === 'holdout' ? ' · unseen layout' : '' }}</option>
+        }
+      </select>
+    </label>
+  } @else {
+    <div class="row">
+      <label class="grow">
+        <span class="lbl">Image (JPG or PNG)</span>
+        <input type="file" accept="image/*" (change)="onFile($event)" />
+      </label>
+      <label>
+        <span class="lbl">doc_id {{ simulated() ? '(required)' : '(optional)' }}</span>
+        <input type="text" [value]="docId()" (input)="docId.set($any($event.target).value)" placeholder="test-00001" />
+      </label>
+    </div>
+  }
+
+  <button class="btn primary send" (click)="send()" [disabled]="!canSend()">
+    {{ busy() ? 'Extracting…' : 'Extract fields' }}
+  </button>
+  @if (error()) {
+    <p class="status err">{{ error() }}</p>
+  }
+</section>
+
+@if (result(); as r) {
+  <section class="grid">
+    <app-document-viewer [doc]="shown()!" [fields]="r.fields" [gold]="gold()" [(selected)]="selectedField" />
+    <div>
+      <h2 class="res-title">Response</h2>
+      <app-extraction-result [response]="r" [gold]="gold()" [(selected)]="selectedField" />
+    </div>
+  </section>
+}

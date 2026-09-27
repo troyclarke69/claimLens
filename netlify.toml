@@ -1,0 +1,32 @@
+# Netlify: builds the Angular demo in web/ and serves it as a static site.
+# Connect the GitHub repo in Netlify; these settings are picked up automatically.
+[build]
+  base    = "web"
+  command = "npm run build"
+  publish = "dist/claimlens-web/browser"   # relative to base
+
+[build.environment]
+  NODE_VERSION = "24"
+
+# The app uses hash routing (/#/demo), but send unknown paths to the app anyway.
+[[redirects]]
+  from   = "/*"
+  to     = "/index.html"
+  status = 200
+
+# Hashed JS/CSS bundles never change: cache them for a year.
+[[headers]]
+  for = "/*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+[[headers]]
+  for = "/*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    X-Frame-Options = "DENY"

@@ -14,3 +14,8 @@ runs/
 *.zip
 
 ClaimLens Interview Prep.md
+
+# Angular demo (web/)
+web/node_modules/
+web/dist/
+web/.angular/

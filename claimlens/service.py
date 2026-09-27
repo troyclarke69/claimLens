@@ -14,6 +14,8 @@ Configuration (environment variables)
   CLAIMLENS_ADAPTERS    folder holding adapters/<name>     (default: adapters)
   CLAIMLENS_DATA        dataset folder (simulated mode looks up labels by doc_id)
   CLAIMLENS_AUDIT_LOG   path of the service audit log     (default: runs/service/audit.jsonl)
+  CLAIMLENS_CORS_ORIGINS  comma-separated browser origins allowed to call the API
+                        (default: the Angular dev server and the hosted demo)
 
 Design notes
 * The model's answer is never trusted blindly: every response carries
@@ -27,6 +29,7 @@ Design notes
 from __future__ import annotations
 
 import hashlib
+import inspect
 import json
 import os
 import tempfile
@@ -37,6 +40,7 @@ from pathlib import Path
 from typing import Optional
 
 from fastapi import FastAPI, File, Form, HTTPException, UploadFile
+from fastapi.middleware.cors import CORSMiddleware
 
 from . import __version__, audit
 from .evaluation import EVALUATOR_VERSION, parse_prediction
@@ -108,6 +112,17 @@ async def _lifespan(_app):
 
 app = FastAPI(title="ClaimLens", version=__version__, lifespan=_lifespan,
               description="Evidence-cited extraction from insurance claim documents (demo).")
+
+# The web demo (web/) calls this API from the browser, so it needs CORS.
+DEFAULT_CORS_ORIGINS = "http://localhost:4200,https://claimlens.netlify.app,https://troyclarke69.github.io"
+_cors = {
+    "allow_origins": [o.strip() for o in os.environ.get("CLAIMLENS_CORS_ORIGINS", DEFAULT_CORS_ORIGINS).split(",") if o.strip()],
+    "allow_methods": ["GET", "POST"],
+    "allow_headers": ["*"],
+}
+if "allow_private_network" in inspect.signature(CORSMiddleware.__init__).parameters:
+    _cors["allow_private_network"] = True  # lets the https demo page reach a service on localhost
+app.add_middleware(CORSMiddleware, **_cors)
 
 
 @app.get("/v1/health")
