@@ -78,6 +78,7 @@ pip install -r requirements.txt -r requirements-service.txt
 python -m pytest -q                                       # 31 tests
 python -m claimlens generate --out data                   # synthetic dataset
 python -m claimlens run --split test --run-id sim_test    # pipeline check with the simulated predictor
+# needs run outputs from the Kaggle notebooks:
 python -m claimlens compare runs/sft_v1_v2_greedy_holdout runs/sft_v2ctrl_v2_greedy_holdout runs/grpo_v1_v2_greedy_holdout
 ```
 
