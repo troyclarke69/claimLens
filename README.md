@@ -14,7 +14,7 @@ questions that matter when you adapt a vision-language model for a regulated dom
 - Can every prediction be traced, re-scored and audited?
 
 > All data is synthetic. There is no real personal information anywhere.
-> **Live demo: [claimlens.netlify.app](https://claimlens.netlify.app)**: real model outputs
+> **Live demo: [troyclarke69.github.io/claimLens](https://troyclarke69.github.io/claimLens/)**: real model outputs
 > with their evidence boxes, plus a client for the API. One-page summary: [`PROJECT_SUMMARY.md`](PROJECT_SUMMARY.md).
 
 ## Results at a glance
